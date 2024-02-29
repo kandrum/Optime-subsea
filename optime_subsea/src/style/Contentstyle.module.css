@@ -1,0 +1,79 @@
+/* Contentstyle.module.css */
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 20px;
+}
+
+.tagsDisplayContainer,
+.filter {
+  background-color: #f0f0f0; /* Light grey background for a subtle look */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  padding: 20px;
+  width: 90%;
+  max-width: 600px; /* Ensuring both containers have the same max-width */
+}
+
+.tagsDisplayContainer {
+  background-color: #e9ecef; /* Slightly darker grey than the filter container for distinction */
+}
+
+.filter {
+  background-color: #f8f9fa; /* Slightly lighter grey to differentiate from tags container */
+}
+
+.header h1,
+.filter h2 {
+  color: #333; /* Dark grey color for text */
+  margin-bottom: 15px;
+}
+
+.tag {
+  cursor: pointer;
+  display: inline-block;
+  margin: 5px;
+  padding: 8px 16px;
+  background-color: #007bff; /* Bootstrap primary color for tags */
+  color: #ffffff;
+  border-radius: 20px; /* Rounded edges for tags */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.tag:hover {
+  background-color: #0056b3; /* Darker shade on hover for interactivity */
+}
+
+ul {
+  list-style-type: none; /* Remove default list styling */
+  padding: 0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input[type="date"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ced4da; /* Bootstrap's input border color */
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #28a745; /* Bootstrap success color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+button:hover {
+  background-color: #218838; /* Darker shade on hover */
+}

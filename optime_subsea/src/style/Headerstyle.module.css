@@ -1,0 +1,65 @@
+.headerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff; /* or any other pleasing color that matches the layout */
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.menuButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  background-color: rgb(63, 214, 63);
+}
+
+.headerTitle {
+  font-size: 24px;
+  color: #333333; /* Dark grey for better contrast */
+  /* font-family: "Times New Roman", Times, serif; /* Set font to Times New Roman */
+  margin-left: 20px; /* Adjust as needed to move text to the right */
+}
+
+.relative {
+  position: relative;
+}
+
+.userButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.userAvatar {
+  width: 40px; /* Adjust size as necessary */
+  height: 40px;
+  border-radius: 20px; /* Makes the image round */
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  padding: 5px 0;
+  z-index: 1000;
+}
+
+.dropdownLink {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #333333;
+  background-color: #ffffff;
+  border: none;
+  text-align: left;
+  width: 100%;
+}
+
+.dropdownLink:hover {
+  background-color: #f8f9fa;
+}

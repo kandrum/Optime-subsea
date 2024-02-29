@@ -1,0 +1,86 @@
+/* Layoutstyle.module.css */
+
+.sidebar {
+  background-color: #f8f9fa; /* Match the background color with the content area */
+  color: #333; /* Color for the text inside the sidebar */
+  min-height: calc(100vh - 60px); /* Assuming the header is 60px tall */
+  width: 250px; /* Fixed width for the sidebar */
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow to the sidebar */
+  position: absolute; /* Positioning relative to its nearest positioned ancestor */
+  top: 60px; /* Offset the top position by the height of the header */
+  bottom: 0; /* Align to the bottom of the viewport */
+  overflow-y: auto; /* Add scroll to the sidebar if content exceeds the viewport height */
+  padding: 1em; /* Padding inside the sidebar */
+  box-sizing: border-box; /* Include padding and border in the element's width and height */
+}
+
+.sidebarHeader {
+  font-size: 1.25em; /* Larger text for the header */
+  margin-bottom: 0.5em; /* Space below the sidebar header */
+  padding-bottom: 0.5em; /* Padding at the bottom of the sidebar header */
+  border-bottom: 1px solid #dee2e6; /* A subtle bottom border */
+}
+
+.sidebarContent {
+  /* No specific styles needed here unless you want to customize further */
+}
+
+.sidebarInput,
+.projectInput {
+  width: 100%; /* Full width of the sidebar */
+  padding: 0.5em;
+  margin-bottom: 1em; /* Space below the input fields */
+  border: 1px solid #dee2e6; /* Border color matching the sidebar header bottom border */
+  border-radius: 4px; /* Rounded corners for the input fields */
+}
+
+.addCompanyBtn,
+.addProjectBtn {
+  background-color: #007bff; /* Bootstrap primary button color */
+  color: white;
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 0.5em; /* Space below the buttons */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block; /* To align button next to the company name */
+}
+
+.companySection {
+  margin-bottom: 1em; /* Space between company sections */
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.companyName {
+  font-weight: bold;
+}
+
+.projectName {
+  padding: 0.375rem 0;
+  margin-left: 1em; /* Indent the project names */
+  cursor: pointer;
+  display: block; /* Project names will be full width */
+}
+
+.projectName.clickable:hover {
+  background-color: #e9ecef; /* A light hover state for project names */
+}
+
+/* Ensure that when the sidebar is hidden it does not take up space */
+.hidden {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative; /* Sidebar will flow in the document flow on smaller screens */
+    top: auto;
+  }
+}

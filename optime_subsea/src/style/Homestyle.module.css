@@ -1,0 +1,66 @@
+/* Homestyle.module.css */
+
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Use the full height of the viewport */
+  overflow: hidden; /* Prevent overflow in the main container */
+}
+
+.headerBackground {
+  width: 100%;
+  background-color: #2c3e50; /* Dark blue background for the header */
+  color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10; /* Ensures the header is above other content */
+  height: 60px; /* Set a fixed height for your header */
+}
+
+.layoutAndContentContainer {
+  display: flex;
+  flex-direction: row; /* Arrange sidebar and content in a row */
+  flex: 1; /* Take up all remaining space after the header */
+}
+
+.layoutContainer {
+  flex: 0 0 250px; /* Sidebar width and prevent growing or shrinking */
+  background-color: #34495e; /* Slightly lighter shade for the sidebar */
+  color: #ecf0f1;
+  overflow-y: auto; /* Scrollable content within the sidebar */
+}
+
+.contentContainer {
+  flex-grow: 1; /* Content takes remaining space */
+  background-color: #ecf0f1; /* Light grey background for content area */
+  padding: 20px;
+  overflow-y: auto; /* Scrollable content within the content area */
+}
+
+/* Additional styles for body and root to handle overall page styling */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: "Arial", sans-serif; /* Default font family */
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .layoutAndContentContainer {
+    flex-direction: column;
+  }
+
+  .layoutContainer {
+    width: 100%; /* Full width for sidebar on smaller screens */
+    height: auto; /* Height will be determined by the content within */
+    order: 2; /* Reorder to push the sidebar below the content on small screens */
+  }
+
+  .contentContainer {
+    order: 1; /* Content goes above the sidebar on small screens */
+  }
+}

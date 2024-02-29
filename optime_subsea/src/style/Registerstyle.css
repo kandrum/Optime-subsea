@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+/* If applying directly to the body, you can omit the .background-container selector */
+.background-container {
+    @apply min-h-screen flex items-center justify-center;
+    background: linear-gradient(132deg, #F473B9, #6979F8, #FEC169, #77D970, #F473B9);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+  }
+  
+
+.form-container {
+  @apply max-w-md mx-auto mt-10 p-8 border rounded shadow-lg;
+}
+
+.form-label {
+  @apply block text-sm font-bold mb-2;
+}
+
+.form-input, .form-select {
+  @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring focus:ring-blue-200;
+}
+
+.submit-button {
+  @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-blue-500;
+}
+
+/*.mb-4 {
+  @apply mb-4;
+}*/
