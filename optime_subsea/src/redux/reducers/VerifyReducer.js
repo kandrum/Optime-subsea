@@ -1,9 +1,12 @@
-const initialState = { "message": "Login successful",
-"result": {
-    "checkstatus": null,
-    "username": null,
-    "role": null
-} };
+const initialState = {
+  message: "Login successful",
+  result: {
+    checkstatus: null,
+    username: null,
+    role: null,
+    userId: null,
+  },
+};
 
 const userTypeReduce = (state = initialState, action) => {
   switch (action.type) {

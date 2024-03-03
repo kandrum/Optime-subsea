@@ -1,8 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+require("dotenv").config();
 const { checkUser } = require("./controlers/loginControler.js");
 const { registerUser } = require("./controlers/registerControler.js");
+const { addCompany } = require("./controlers/addCompaniService");
 
 const PORT = 1226;
 
@@ -53,6 +55,22 @@ app.post("/logincheck", (req, res) => {
 });
 //creating a new router to recive data from frontend
 app.post("/register", registerUser);
+
+// POST endpoint to add a company
+app.post("/addcompany", (req, res) => {
+  const { companyname, userid } = req.body;
+
+  // Call the addCompany function with the company data
+  addCompany({ companyname, userid })
+    .then((result) => {
+      // Send a success response with the result
+      res.status(201).json(result);
+    })
+    .catch((error) => {
+      // Send an error response
+      res.status(500).json({ message: "Error adding company", error });
+    });
+});
 
 // Start the server
 app.listen(PORT, () => {

@@ -1,16 +1,18 @@
 //store.js
-import { createStore,combineReducers } from 'redux';
-import companiesReducer from './reducers/companiesReducers';
-import currentSelectionReducer from './reducers/currentCompanyProject'
-import userTypeReduce from './reducers/VerifyReducer';
-import uiReducer from './reducers/uiReducer';
-
+import { createStore, combineReducers } from "redux";
+import companiesReducer from "./reducers/companiesReducers";
+import currentSelectionReducer from "./reducers/currentCompanyProject";
+import userTypeReduce from "./reducers/VerifyReducer";
+import uiReducer from "./reducers/uiReducer";
+import clickAddReducer from "./reducers/addcompanybutton";
+import clickProjectReducer from "./reducers/addProjectButton";
 const rootReducer = combineReducers({
   companies: companiesReducer,
-  userType:userTypeReduce,
+  userType: userTypeReduce,
   currentSelection: currentSelectionReducer,
-  ui:uiReducer,
-  
+  ui: uiReducer,
+  clickAdd: clickAddReducer,
+  clickProjectReducer: clickProjectReducer,
 });
 
 const store = createStore(

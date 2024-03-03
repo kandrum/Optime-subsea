@@ -5,12 +5,14 @@
   background-color: #ffffff; /* or any other pleasing color that matches the layout */
   padding: 10px 20px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  color: black;
 }
 
 .menuButton {
   background: none;
   border: none;
   font-size: 24px;
+
   cursor: pointer;
   background-color: rgb(63, 214, 63);
 }
