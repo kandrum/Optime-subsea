@@ -1,0 +1,100 @@
+/* style/addcompany.module.css */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  color: #333;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Add these styles to your existing addcompany.module.css file */
+
+.smallButton {
+  padding: 2px 6px;
+  font-size: 14px;
+  background-color: #5148cc;
+  border-radius: 4px;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.smallButton:hover {
+  background-color: #28ce46;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.deleteButton {
+  padding: 2px 6px;
+  font-size: 14px;
+  background-color: #d51a1a;
+  border-radius: 4px;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.deleteButton:hover {
+  background-color: #160202;
+}
+
+li {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+li button {
+  margin-left: 10px;
+}
+
+li ul {
+  padding-top: 10px;
+}
+
+li ul li {
+  background-color: #e9ecef;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+li ul li:hover {
+  background-color: #dde2e6;
+}

@@ -4,7 +4,15 @@ const app = express();
 require("dotenv").config();
 const { checkUser } = require("./controlers/loginControler.js");
 const { registerUser } = require("./controlers/registerControler.js");
-const { addCompany } = require("./controlers/addCompaniService");
+const {
+  addCompany,
+  getAllCompanies,
+  deleteCompany,
+} = require("./controlers/addCompaniService");
+const {
+  addProject,
+  fetchAllProjects,
+} = require("./controlers/addProjectService.js");
 
 const PORT = 1226;
 
@@ -56,7 +64,7 @@ app.post("/logincheck", (req, res) => {
 //creating a new router to recive data from frontend
 app.post("/register", registerUser);
 
-// POST endpoint to add a company
+/* ---------------------------- POST endpoint to add a company --------------------------- */
 app.post("/addcompany", (req, res) => {
   const { companyname, userid } = req.body;
 
@@ -72,7 +80,79 @@ app.post("/addcompany", (req, res) => {
     });
 });
 
-// Start the server
+/* ----------------------------------------  Endpoint to add a project --------------------- */
+app.post("/addprojects", async (req, res) => {
+  try {
+    // Extract project data from request body
+    const projectData = req.body;
+
+    // Call the addProject function and await its response
+    const result = await addProject(projectData);
+
+    // Send success response
+    res.status(201).json(result);
+  } catch (err) {
+    // Handle errors
+    console.error("Error in /projects endpoint:", err.message);
+    res.status(500).json({ message: "Failed to add project" });
+  }
+});
+
+/* ---------------------------------------- get all companies ------------------------------- */
+app.get("/getcompanies", async (req, res) => {
+  try {
+    const companies = await getAllCompanies();
+    // Directly return the fetched companies data, which includes both companyid and companyname
+    res.json(companies);
+  } catch (err) {
+    console.error("Error fetching companies:", err.message);
+    res.status(500).json({ message: "Failed to fetch companies" });
+  }
+});
+
+/* ---------------------------------------- get the projects ------------------------------- */
+
+app.get("/getallprojects", async (req, res) => {
+  try {
+    const projects = await fetchAllProjects();
+    res.status(200).json({
+      message: "Projects fetched successfully",
+      data: projects,
+    });
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    res.status(500).json({
+      message: "Failed to fetch projects",
+      error: err.message,
+    });
+  }
+});
+
+/* ---------------------------------------- delete company ------------------------------- */
+app.delete("/deletecompany", async (req, res) => {
+  const { companyid } = req.body; // Extract the company ID from the request body
+
+  if (!companyid) {
+    return res.status(400).json({ message: "Company ID must be provided" });
+  }
+
+  try {
+    const result = await deleteCompany(companyid);
+    if (result.message === "No company found with the provided ID") {
+      res.status(404).json(result); // If no company is found, send a 404 response
+    } else {
+      res.status(200).json(result); // Send a success response
+    }
+  } catch (error) {
+    console.error("Failed to delete company:", error);
+    res
+      .status(500)
+      .json({
+        message: "Failed to delete the company due to an internal error.",
+      });
+  }
+});
+/* ---------------------------------------- Start the server ------------------------------- */
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

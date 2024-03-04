@@ -3,64 +3,67 @@
 .homeContainer {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Use the full height of the viewport */
-  overflow: hidden; /* Prevent overflow in the main container */
+  height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Example font */
 }
 
 .headerBackground {
-  width: 100%;
-  background-color: #2c3e50; /* Dark blue background for the header */
-  color: #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 10; /* Ensures the header is above other content */
-  height: 60px; /* Set a fixed height for your header */
+  background-color: #ced4db; /* Example header background color */
+  color: #ffffff; /* White text for contrast */
+  padding: 20px;
+  text-align: center;
+  font-size: 24px; /* Large, readable text */
 }
 
-.layoutAndContentContainer {
+.mainLayout {
   display: flex;
-  flex-direction: row; /* Arrange sidebar and content in a row */
-  flex: 1; /* Take up all remaining space after the header */
+  flex-grow: 1; /* Allow the main layout to fill the available space */
+  overflow: hidden; /* Prevents overflow from child elements */
 }
 
-.layoutContainer {
-  flex: 0 0 250px; /* Sidebar width and prevent growing or shrinking */
-  background-color: #34495e; /* Slightly lighter shade for the sidebar */
-  color: #ecf0f1;
-  overflow-y: auto; /* Scrollable content within the sidebar */
+.leftSidebarContainer {
+  background-color: #f8f9fa; /* Light grey background for the sidebar */
+  width: 500px; /* Fixed width for the sidebar */
+  padding: 20px; /* Spacing inside the sidebar */
+  overflow-y: auto; /* Enable scrolling for overflow content */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow to the right of the sidebar */
 }
 
 .contentContainer {
-  flex-grow: 1; /* Content takes remaining space */
-  background-color: #ecf0f1; /* Light grey background for content area */
-  padding: 20px;
-  overflow-y: auto; /* Scrollable content within the content area */
+  flex-grow: 1; /* Allow content to take up the remaining space */
+  background-color: #ffffff; /* White background for content */
+  padding: 20px; /* Spacing inside the content area */
+  overflow-y: auto; /* Enable scrolling for overflow content */
 }
 
-/* Additional styles for body and root to handle overall page styling */
-html,
-body,
-#root {
-  height: 100%;
-  margin: 0;
+/* Styles for the AddCompanyAndProjectForm component (if needed) */
+.addCompanyForm {
+  background-color: #ffffff; /* White background for the form */
+  padding: 15px;
+  margin-bottom: 20px; /* Space between form and next element */
+  border-radius: 4px; /* Rounded corners for the form */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow around the form */
 }
 
-body {
-  font-family: "Arial", sans-serif; /* Default font family */
+.addCompanyForm input,
+.addCompanyForm select,
+.addCompanyForm button {
+  width: 100%; /* Full width elements */
+  padding: 10px; /* Spacing inside inputs and button */
+  margin: 8px 0; /* Space between form elements */
+  border: 1px solid #ced4da; /* Border color */
+  border-radius: 4px; /* Rounded corners */
 }
 
-/* Media queries for responsive design */
-@media (max-width: 768px) {
-  .layoutAndContentContainer {
-    flex-direction: column;
-  }
-
-  .layoutContainer {
-    width: 100%; /* Full width for sidebar on smaller screens */
-    height: auto; /* Height will be determined by the content within */
-    order: 2; /* Reorder to push the sidebar below the content on small screens */
-  }
-
-  .contentContainer {
-    order: 1; /* Content goes above the sidebar on small screens */
-  }
+.addCompanyForm button {
+  background-color: #007bff; /* Button color */
+  color: #ffffff; /* Text color */
+  font-weight: bold;
+  cursor: pointer; /* Cursor change to indicate clickability */
 }
+
+.addCompanyForm button:hover {
+  background-color: #0056b3; /* Darker on hover */
+}
+
+/* Adjustments for responsiveness or additional elements can be added here */

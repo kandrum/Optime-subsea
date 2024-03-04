@@ -13,32 +13,12 @@ function Header() {
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
-  const goToRegister = () => {
-    if (userType.result.role === "admin") {
-      navigate("/register");
-    } else {
-      alert("You do not have access to Register user");
-    }
-  };
-
-  const handleAddCompanyClick = () => {
-    // Dispatch an action directly with the type and no payload
-    // The reducer will toggle the clicked state
-    dispatch({ type: "TOGGLE_CLICKED" });
-  };
   const goToLogin = () => {
     navigate("/");
   };
 
-  const handleAddProjectClick = () => {
-    // Dispatch an action to toggle the state for adding a project
-    dispatch({ type: "TOGGLE_CLICKED_Project" });
-  };
-
   return (
     <div className={styles.headerContainer}>
-      <button onClick={handleAddCompanyClick}>Add-company</button>
-      <button onClick={handleAddProjectClick}>Add-Project</button>
       <h1 className={styles.headerTitle}>Data-Visualization optime subsea </h1>
       <div className={styles.relative}>
         <button onClick={toggleDropdown} className={styles.userButton}>

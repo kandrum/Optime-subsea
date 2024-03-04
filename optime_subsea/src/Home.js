@@ -1,33 +1,28 @@
 import React from "react";
 import Header from "./Header";
 import Content from "./Content";
-import styles from "./style/Homestyle.module.css"; // Ensure the path to your styles is correct
-import { useSelector } from "react-redux"; // Corrected import statement
+import styles from "./style/Homestyle.module.css";
+import { useSelector } from "react-redux";
+import AddCompanyAndProjectForm from "./addCompany";
 
 function Home() {
-  // Access the userType state using the useSelector hook
-  const userType = useSelector((state) => state.userType);
-  const Project_clicked = useSelector((state) => state.clickAdd.clicked);
-  const company_clicked = useSelector(
-    (state) => state.clickProjectReducer.clicked
-  );
-  // Log the userType state
-  React.useEffect(() => {
-    console.log("Current User Type from Homecomponent:", userType);
-  }, [userType]);
-
-  console.log("from Home company", Project_clicked);
-  console.log("from home project", company_clicked);
+  // Redux selectors and useEffect hook here
 
   return (
     <div className={styles.homeContainer}>
-      <div className={styles.headerBackground}>
+      <header className={styles.headerBackground}>
         <Header />
-      </div>
-      <div className={styles.layoutAndContentContainer}>
-        <div className={styles.contentContainer}>
+        {/* ... header content ... */}
+      </header>
+      <div className={styles.mainLayout}>
+        <aside className={styles.leftSidebarContainer}>
+          <AddCompanyAndProjectForm />
+          {/* ... sidebar content ... */}
+        </aside>
+        <main className={styles.contentContainer}>
           <Content />
-        </div>
+          {/* ... main content ... */}
+        </main>
       </div>
     </div>
   );
