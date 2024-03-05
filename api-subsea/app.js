@@ -12,6 +12,7 @@ const {
 const {
   addProject,
   fetchAllProjects,
+  deleteProject,
 } = require("./controlers/addProjectService.js");
 
 const PORT = 1226;
@@ -145,11 +146,33 @@ app.delete("/deletecompany", async (req, res) => {
     }
   } catch (error) {
     console.error("Failed to delete company:", error);
-    res
+    res.status(500).json({
+      message: "Failed to delete the company due to an internal error.",
+    });
+  }
+});
+/* ---------------------------------------- delete project ------------------------------- */
+app.delete("/deleteProject", async (req, res) => {
+  try {
+    // Assuming the projectId is sent in the request body or as a query parameter
+    const projectId = req.body.projectId || req.query.projectId;
+
+    if (!projectId) {
+      return res.status(400).send({ message: "Project ID is required" });
+    }
+
+    const result = await deleteProject(projectId);
+
+    if (result.message === "No project found with the specified ID") {
+      return res.status(404).send(result);
+    } else {
+      return res.status(200).send(result);
+    }
+  } catch (err) {
+    console.error("Error in /deleteProject route:", err);
+    return res
       .status(500)
-      .json({
-        message: "Failed to delete the company due to an internal error.",
-      });
+      .send({ message: "Error deleting project", error: err.message });
   }
 });
 /* ---------------------------------------- Start the server ------------------------------- */

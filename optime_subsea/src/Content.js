@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Content = () => {
   return (
     <div>
-      <p>i am content</p>
+      <p>Upload your file Here</p>
     </div>
   );
 };

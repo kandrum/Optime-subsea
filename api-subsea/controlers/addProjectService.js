@@ -51,4 +51,31 @@ async function fetchAllProjects() {
   }
 }
 
-module.exports = { addProject, fetchAllProjects };
+async function deleteProject(projectId) {
+  try {
+    const query = "DELETE FROM projects WHERE projectid = ?";
+    const values = [projectId];
+
+    // Use the pool to execute the query
+    const [results] = await pool.query(query, values);
+
+    if (results.affectedRows === 0) {
+      console.log("No project found with ID:", projectId);
+      return {
+        message: "No project found with the specified ID",
+        projectId: projectId,
+      }; // Return a message indicating no project was deleted
+    } else {
+      console.log("Project deleted successfully with ID:", projectId);
+      return {
+        message: "Project deleted successfully",
+        projectId: projectId,
+      }; // Return the success message and project ID of the deleted project
+    }
+  } catch (err) {
+    console.error("Error deleting the project:", err);
+    throw err; // Rethrow the error to be handled by the caller
+  }
+}
+
+module.exports = { addProject, fetchAllProjects, deleteProject };

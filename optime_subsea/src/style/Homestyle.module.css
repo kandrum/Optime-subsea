@@ -23,7 +23,7 @@
 
 .leftSidebarContainer {
   background-color: #f8f9fa; /* Light grey background for the sidebar */
-  width: 500px; /* Fixed width for the sidebar */
+  width: 400px; /* Fixed width for the sidebar */
   padding: 20px; /* Spacing inside the sidebar */
   overflow-y: auto; /* Enable scrolling for overflow content */
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow to the right of the sidebar */

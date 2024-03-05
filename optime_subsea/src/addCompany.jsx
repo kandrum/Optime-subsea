@@ -57,6 +57,20 @@ function AddCompanyAndProjectForm() {
     }
   };
 
+  const handleDeleteProject = async (projectId) => {
+    const response = await fetch("http://localhost:1226/deleteProject", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ projectId }),
+    });
+    if (response.ok) {
+      fetchProjects(); // Refresh the projects list to reflect the deletion
+    } else {
+      console.error("Failed to delete the project.");
+      // Optionally, you could handle this error more gracefully in your UI
+    }
+  };
+
   const handleAddProject = async (companyid) => {
     const response = await fetch("http://localhost:1226/addprojects", {
       method: "POST",
@@ -120,7 +134,7 @@ function AddCompanyAndProjectForm() {
             </button>
             <button
               onClick={() => handleDeleteCompany(company.companyid)}
-              className={styles.deleteButton} // Consider adding a different class for styling
+              className={styles.deleteButton}
             >
               🗑️
             </button>
@@ -151,6 +165,12 @@ function AddCompanyAndProjectForm() {
                     }
                   >
                     {project.name}
+                    <button
+                      onClick={() => handleDeleteProject(project.projectid)}
+                      className={styles.deleteButton} // Consider styling appropriately
+                    >
+                      🗑️
+                    </button>
                   </li>
                 ))}
             </ul>
