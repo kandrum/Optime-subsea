@@ -1,25 +1,17 @@
-// currentSelectionReducer.js
-
 const initialState = {
   clicked: false,
+  currentCompany: {},
 };
 
 const currentSelectionReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_CURRENT_COMPANY":
+    case "SET_CURRENT_COMPANY_project":
       return {
         ...state,
+        clicked: true,
         currentCompany: action.payload,
       };
-    case "SET_CURRENT_PROJECT":
-      return {
-        ...state,
-        currentProject: action.payload,
-      };
-    case "CLEAR_CURRENT_SELECTIONS":
-      return {
-        ...initialState,
-      };
+
     default:
       return state;
   }

@@ -11,7 +11,7 @@ function AddCompanyAndProjectForm() {
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const userType = useSelector((state) => state.userType);
   const [userID, setUserId] = useState(userType.result.userId);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     fetchCompanies();
     fetchProjects();
@@ -84,6 +84,17 @@ function AddCompanyAndProjectForm() {
     }
   };
 
+  // actions/currentSelectionActions.js
+  const setCurrentCompanyProject = (
+    companyid,
+    projectid,
+    companyname,
+    projectname
+  ) => ({
+    type: "SET_CURRENT_COMPANY_project",
+    payload: { companyid, projectid, companyname, projectname },
+  });
+
   const handleProjectClick = (
     companyid,
     projectid,
@@ -92,6 +103,11 @@ function AddCompanyAndProjectForm() {
   ) => {
     console.log(
       `CompanyID: ${companyid}, ProjectID: ${projectid}, CompanyName: ${companyname}, ProjectName: ${projectname}`
+    );
+
+    // Dispatch the action to the store
+    dispatch(
+      setCurrentCompanyProject(companyid, projectid, companyname, projectname)
     );
   };
 

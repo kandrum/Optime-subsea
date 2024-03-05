@@ -56,14 +56,14 @@
 }
 
 .addCompanyForm button {
-  background-color: #007bff; /* Button color */
-  color: #ffffff; /* Text color */
+  background-color: #007bff;
+  color: #ffffff;
   font-weight: bold;
-  cursor: pointer; /* Cursor change to indicate clickability */
+  cursor: pointer;
 }
 
 .addCompanyForm button:hover {
-  background-color: #0056b3; /* Darker on hover */
+  background-color: #0056b3;
 }
 
 /* Adjustments for responsiveness or additional elements can be added here */
