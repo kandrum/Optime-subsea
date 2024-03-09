@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import user from "./user.png";
 import styles from "./style/Headerstyle.module.css"; // Adjust the import path as needed
-
+import headerBackground from "./header.jpg";
 function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();

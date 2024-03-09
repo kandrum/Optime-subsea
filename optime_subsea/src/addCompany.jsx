@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./style/addcompany.module.css";
 import { useDispatch, useSelector } from "react-redux";
+import headerBackground from "./sidebar.jpg";
+import { ip } from "./appconstants";
 function AddCompanyAndProjectForm() {
   const [companies, setCompanies] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -18,20 +20,20 @@ function AddCompanyAndProjectForm() {
   }, []);
 
   const fetchCompanies = async () => {
-    const response = await fetch("http://localhost:1226/getcompanies");
+    const response = await fetch(`${ip}/getcompanies`);
     const data = await response.json();
     setCompanies(data);
   };
 
   const fetchProjects = async () => {
-    const response = await fetch("http://localhost:1226/getallprojects");
+    const response = await fetch(`${ip}/getallprojects`);
     const data = await response.json();
     setProjects(data.data);
   };
 
   const handleAddCompany = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:1226/addcompany", {
+    const response = await fetch(`${ip}/addcompany`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ companyname: newCompanyName, userid: userID }),
@@ -43,44 +45,93 @@ function AddCompanyAndProjectForm() {
     }
   };
   const handleDeleteCompany = async (companyid) => {
-    const response = await fetch("http://localhost:1226/deletecompany", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ companyid }),
-    });
-    if (response.ok) {
-      // If the delete operation was successful, fetch the updated list of companies
-      fetchCompanies();
+    // Ask user for confirmation before deleting
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this company and all its associated projects?"
+    );
+
+    // Proceed with deletion only if user confirmed
+    if (isConfirmed) {
+      const response = await fetch(`${ip}/deletecompany`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ companyid }),
+      });
+
+      if (response.ok) {
+        fetchCompanies(); // Refresh the companies list to reflect the deletion
+        alert("Company has been successfully deleted."); // Optional: Notify user of success
+      } else {
+        console.error("Failed to delete the company.");
+        alert("Failed to delete the company."); // Optionally, inform the user about the failure
+        // Further error handling or user notification logic can be added here
+      }
     } else {
-      // Handle error situation or notify the user
-      console.error("Failed to delete the company.");
+      // If the user clicks Cancel, you might want to notify them or take other actions
+      console.log("Company deletion canceled."); // This is optional
     }
   };
 
   const handleDeleteProject = async (projectId) => {
-    const response = await fetch("http://localhost:1226/deleteProject", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ projectId }),
-    });
-    if (response.ok) {
-      fetchProjects(); // Refresh the projects list to reflect the deletion
+    // Ask user for confirmation before deleting
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this project?"
+    );
+
+    // Proceed with deletion only if user confirmed
+    if (isConfirmed) {
+      const response = await fetch(`${ip}/deleteProject`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId }),
+      });
+
+      if (response.ok) {
+        fetchProjects(); // Refresh the projects list to reflect the deletion
+        alert("Project has been successfully deleted."); // Optional: Notify user of success
+      } else {
+        console.error("Failed to delete the project.");
+        alert("Failed to delete the project."); // Optionally, inform the user about the failure
+        // Further error handling or user notification logic can be added here
+      }
     } else {
-      console.error("Failed to delete the project.");
-      // Optionally, you could handle this error more gracefully in your UI
+      // If the user clicks Cancel, you might want to notify them or take other actions
+      console.log("Project deletion canceled."); // This is optional
     }
   };
 
-  const handleAddProject = async (companyid) => {
-    const response = await fetch("http://localhost:1226/addprojects", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newProjectName, companyid, userid: userID }),
-    });
-    if (response.ok) {
-      fetchProjects();
-      setShowProjectInput({ ...showProjectInput, [companyid]: false });
-      setNewProjectName("");
+  const handleAddProject = async (e, companyid) => {
+    // Prevent the default form submission behavior
+    e.preventDefault();
+    console.log("from handleAddProject", companyid);
+
+    try {
+      const response = await fetch(`${ip}/addprojects`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: newProjectName, // Ensure this matches "New Project3356" format in your actual use case
+          companyid: companyid, // This should match a valid company ID, like 13
+          userid: userID, // Make sure userID matches a valid user ID, like 101
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json(); // Assuming your server sends back some response
+        console.log("Project added successfully", data);
+        fetchProjects(); // Refresh the projects list to include the newly added project
+        setShowProjectInput({ ...showProjectInput, [companyid]: false });
+        setNewProjectName(""); // Reset the project name input field
+      } else {
+        // Handle non-200 responses
+        const errorData = await response.json(); // Assuming your server sends back error details in JSON format
+        console.error("Failed to add the project. Response:", errorData);
+      }
+    } catch (error) {
+      // Handle network errors or other fetch issues
+      console.error("Failed to add the project. Error:", error);
     }
   };
 
@@ -113,7 +164,6 @@ function AddCompanyAndProjectForm() {
 
   return (
     <div className={styles.container}>
-      <h2>Add Companies</h2>
       {showCompanyInput ? (
         <form onSubmit={handleAddCompany}>
           <input
@@ -155,7 +205,7 @@ function AddCompanyAndProjectForm() {
               🗑️
             </button>
             {showProjectInput[company.companyid] && (
-              <form onSubmit={() => handleAddProject(company.companyid)}>
+              <form onSubmit={(e) => handleAddProject(e, company.companyid)}>
                 <input
                   type="text"
                   value={newProjectName}

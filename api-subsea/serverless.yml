@@ -1,0 +1,17 @@
+org: naveen2628
+app: lambdasubsea3
+service: serverlesslambda3
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-2
+
+functions:
+  api:
+    handler: index.handler
+    events:
+      - httpApi:
+          path: /{any+}
+          method: "*"

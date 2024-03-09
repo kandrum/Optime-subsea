@@ -1,3 +1,4 @@
+const serverless = require("serverless-http");
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -14,7 +15,13 @@ const {
   fetchAllProjects,
   deleteProject,
 } = require("./controlers/addProjectService.js");
-
+const { upload, handleZipUpload } = require("./controlers/zipHandler.js");
+const { listDirectories } = require("./controlers/listFoldersFiles");
+const multer = require("multer");
+const AdmZip = require("adm-zip");
+const fs = require("fs");
+const path = require("path");
+const csv = require("csv-parser");
 const PORT = 1226;
 
 // CORS options to allow all origins and all HTTP methods
@@ -175,7 +182,48 @@ app.delete("/deleteProject", async (req, res) => {
       .send({ message: "Error deleting project", error: err.message });
   }
 });
-/* ---------------------------------------- Start the server ------------------------------- */
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+
+/* ---------------------------------------- file upload ------------------------------- */
+
+// Example ZIP extraction function
+function extractZip(zipFilePath, extractToPath) {
+  // Check if the target directory exists, and if so, remove it first
+  if (fs.existsSync(extractToPath)) {
+    fs.rmSync(extractToPath, { recursive: true, force: true });
+  }
+
+  // Now, proceed with extraction
+  const zip = new AdmZip(zipFilePath);
+  try {
+    zip.extractAllTo(extractToPath, true);
+    console.log("Extraction complete");
+    // Optionally, delete the zip file after extraction
+    fs.unlinkSync(zipFilePath);
+  } catch (error) {
+    console.error("Extraction error:", error);
+  }
+}
+
+// Example file upload and ZIP extraction endpoint
+// Define the route for ZIP file upload and extraction
+app.post("/upload", upload.single("zipfile"), handleZipUpload);
+
+/* ---------------------------------------- List all uploads------------------------------- */
+// index.js
+app.get("/list-uploads", (req, res) => {
+  const uploadsDir = path.join(__dirname, "uploads"); // Adjust as necessary
+  try {
+    const directoryStructure = listDirectories(uploadsDir);
+    res.json(directoryStructure);
+  } catch (error) {
+    console.error("Failed to list directory contents:", error);
+    res.status(500).send({ message: "Failed to list directory contents" });
+  }
 });
+
+/* ---------------------------------------- Start the server ------------------------------- */
+app.listen(PORT, "localhost", () => {
+  console.log(`Server is running on localhost:${PORT}`);
+});
+
+//module.exports.handler = serverless(app);

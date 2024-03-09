@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./style/Contentstyle.module.css"; // Ensure this path is correct
 import { useSelector } from "react-redux";
-
+import contentimg from "./content.jpg";
 const Content = () => {
   const openAWSConsole = () => {
     window.open(
@@ -41,12 +41,9 @@ const Content = () => {
         {" "}
         {/* Note: corrected the typo here */}
         {/* Conditional rendering based on user role */}
-        {(userType.result.role === "admin" ||
-          userType.result.role === "supervisor") && (
-          <button onClick={openAWSConsole} className={styles.btnclass}>
-            Upload File
-          </button>
-        )}
+        <button onClick={openAWSConsole} className={styles.btnclass}>
+          Upload File
+        </button>
         <button className={styles.btnclass}>Analyze</button>
       </div>
     </div>

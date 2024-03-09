@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { verifyUser } from "./redux/actions/VerifyAction";
 import styles from "./style/Loginstyle.module.css";
 import backgroundImage from "./style/Image2.png"; // Import the background image
+import { ip } from "./appconstants";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -18,7 +19,7 @@ function Login() {
     setErrorMessage("");
 
     try {
-      const response = await fetch("http://localhost:1226/logincheck", {
+      const response = await fetch(`${ip}/logincheck`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

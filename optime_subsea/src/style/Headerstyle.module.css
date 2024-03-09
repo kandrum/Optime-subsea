@@ -4,14 +4,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #ced4db; /* Dark cyan background */
+  background-color: #adb5bd; /* Dark cyan background */
   color: #ffffff; /* White text color */
   padding: 10px 20px;
 }
 
 .headerTitle {
   margin: 0;
-  color: black;
+  color: rgb(21, 2, 2);
   font-size: 1.5rem; /* Responsive font size */
   font-weight: normal;
 }
