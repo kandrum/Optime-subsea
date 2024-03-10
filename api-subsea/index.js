@@ -22,6 +22,7 @@ const AdmZip = require("adm-zip");
 const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
+const handleFileRequest = require("./controlers/filePathService.js");
 const PORT = 1226;
 
 // CORS options to allow all origins and all HTTP methods
@@ -220,6 +221,10 @@ app.get("/list-uploads", (req, res) => {
     res.status(500).send({ message: "Failed to list directory contents" });
   }
 });
+
+/* ---------------------------------------- Insert file path ------------------------------- */
+
+app.post("/add-file", handleFileRequest);
 
 /* ---------------------------------------- Start the server ------------------------------- */
 app.listen(PORT, "localhost", () => {

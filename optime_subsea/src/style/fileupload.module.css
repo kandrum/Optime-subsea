@@ -1,0 +1,79 @@
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.fileInputContainer {
+  width: 100%;
+  margin-bottom: 15px; /* Adjust spacing between input and button */
+}
+
+.fileInput {
+  width: calc(100% - 24px);
+  padding: 8px 12px;
+  border: 2px solid #007bff;
+  border-radius: 4px;
+  background-color: #e7f1ff;
+  margin-bottom: 10px; /* Space between input and button */
+  display: block;
+}
+
+.uploadButton {
+  background-color: #007bff;
+  color: white;
+  padding: 6px 12px; /* Smaller padding for a smaller button */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%; /* Full width of the container */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+}
+
+.detailsContainer {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.subFolder {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-left: 4px solid #007bff;
+  border-radius: 4px;
+}
+
+.subFolder h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.fileList {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fileList li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.fileList li:last-child {
+  border: none;
+}
