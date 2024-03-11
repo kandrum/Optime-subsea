@@ -5,7 +5,10 @@ import styles from "./style/fileupload.module.css";
 
 function FileUpload() {
   const [file, setFile] = useState(null);
-  const [fetchedData, setFetchedData] = useState(null); // State to store fetched data
+  const [fetchedData, setFetchedData] = useState(null);
+  const [uploadEndpoint, setUploadEndpoint] = useState("");
+  const [folderName, setFolderName] = useState(""); // State variable for folderName
+  const [formDataKey, setFormDataKey] = useState("file"); // Default key is "file"
 
   // Accessing userType and currentCompany from Redux store
   const userType = useSelector((state) => state.userType);
@@ -13,8 +16,13 @@ function FileUpload() {
     (state) => state.currentSelection.currentCompany
   );
 
-  // Construct folderName from currentCompany's details
-  const folderName = `${currentCompany.companyname}${currentCompany.projectname}`;
+  useEffect(() => {
+    // Construct folderName from currentCompany's details
+    if (currentCompany.companyname && currentCompany.projectname) {
+      const newFolderName = `${currentCompany.companyname}${currentCompany.projectname}`;
+      setFolderName(newFolderName);
+    }
+  }, [currentCompany]); // Depend on currentCompany to update folderName
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,17 +32,31 @@ function FileUpload() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setFetchedData(data); // Storing the fetched data in state
+        setFetchedData(data);
       } catch (error) {
         console.error("Failed to fetch:", error);
       }
     };
 
     fetchData();
-  }, []); // Dependency array is empty, so this runs once on mount
+  }, []);
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) return; // Exit if no file was selected
+
+    // Check if the file is a zip file
+    const isZip = selectedFile.type === "application/x-zip-compressed";
+
+    console.log(`Selected file type: ${selectedFile.type}`); // Log the MIME type of the file
+
+    setFile(selectedFile);
+    // Set the upload endpoint based on whether the file is a zip
+    setUploadEndpoint(isZip ? "/upload" : "/otherupload");
+
+    // Set the FormData key based on the file type
+    const newFormDataKey = isZip ? "zipfile" : "file";
+    setFormDataKey(newFormDataKey);
   };
 
   const handleFileUpload = async () => {
@@ -43,12 +65,16 @@ function FileUpload() {
       return;
     }
 
+    // Log the file type before uploading
+    console.log(`Uploading file type: ${file.type}`);
+
     const formData = new FormData();
-    formData.append("zipfile", file);
+    // Use the FormData key determined based on the file type
+    formData.append(formDataKey, file);
     formData.append("folderName", folderName);
 
     try {
-      const response = await fetch(`${ip}/upload`, {
+      const response = await fetch(`${ip}${uploadEndpoint}`, {
         method: "POST",
         body: formData,
       });
@@ -65,12 +91,11 @@ function FileUpload() {
     }
   };
 
-  // Function to render files based on the folder name
   const renderFiles = () => {
-    if (!fetchedData) return <p>Loading files...</p>; // Show loading state if data is not fetched yet
+    if (!fetchedData) return <p>Loading files...</p>;
 
     const folderData = fetchedData[folderName];
-    if (!folderData) return <p>No files found for the selected folder.</p>; // Show message if no data is found for the folder
+    if (!folderData) return <p>No files found for the selected folder.</p>;
 
     return Object.entries(folderData).map(([subFolder, detail]) => (
       <div key={subFolder}>
@@ -91,7 +116,6 @@ function FileUpload() {
         <input
           type="file"
           onChange={handleFileChange}
-          accept=".zip"
           className={styles.fileInput}
         />
         <button onClick={handleFileUpload} className={styles.uploadButton}>

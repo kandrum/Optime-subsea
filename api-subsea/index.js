@@ -1,10 +1,15 @@
 const serverless = require("serverless-http");
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const app = express();
 require("dotenv").config();
 const { checkUser } = require("./controlers/loginControler.js");
 const { registerUser } = require("./controlers/registerControler.js");
+const {
+  uploadMiddleware,
+  handleFileUpload,
+} = require("./controlers/otherfiles.js");
 const {
   addCompany,
   getAllCompanies,
@@ -39,6 +44,8 @@ app.use(cors(corsOptions));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Define routes
 app.get("/", (req, res) => {
@@ -208,6 +215,7 @@ function extractZip(zipFilePath, extractToPath) {
 // Example file upload and ZIP extraction endpoint
 // Define the route for ZIP file upload and extraction
 app.post("/upload", upload.single("zipfile"), handleZipUpload);
+app.post("/otherupload", uploadMiddleware("file"), handleFileUpload);
 
 /* ---------------------------------------- List all uploads------------------------------- */
 // index.js
