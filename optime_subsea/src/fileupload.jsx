@@ -7,9 +7,8 @@ function FileUpload() {
   const [file, setFile] = useState(null);
   const [fetchedData, setFetchedData] = useState(null);
   const [uploadEndpoint, setUploadEndpoint] = useState("");
-  const [folderName, setFolderName] = useState(""); // State variable for folderName
-  const [formDataKey, setFormDataKey] = useState("file"); // Default key is "file"
-
+  const [folderName, setFolderName] = useState("");
+  const [formDataKey, setFormDataKey] = useState("file");
   // Accessing userType and currentCompany from Redux store
   const userType = useSelector((state) => state.userType);
   const currentCompany = useSelector(
