@@ -218,18 +218,20 @@ app.post("/upload", upload.single("zipfile"), handleZipUpload);
 app.post("/otherupload", uploadMiddleware("file"), handleFileUpload);
 
 /* ---------------------------------------- List all uploads------------------------------- */
-// index.js
+
 app.get("/list-uploads", (req, res) => {
-  const uploadsDir = path.join(__dirname, "uploads"); // Adjust as necessary
-  try {
-    const directoryStructure = listDirectories(uploadsDir);
+  const uploadsDir = path.join(__dirname, "uploads");
+  const folderName = req.query.folder || "";
+
+  const directoryStructure = listDirectories(uploadsDir, folderName);
+
+  if (directoryStructure.message) {
+    // Check for the 'message' in the response and return it
+    res.status(200).json(directoryStructure);
+  } else {
     res.json(directoryStructure);
-  } catch (error) {
-    console.error("Failed to list directory contents:", error);
-    res.status(500).send({ message: "Failed to list directory contents" });
   }
 });
-
 /* ---------------------------------------- Insert file path ------------------------------- */
 
 app.post("/add-file", handleFileRequest);

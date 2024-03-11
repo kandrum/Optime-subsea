@@ -22,16 +22,19 @@ function FileUpload() {
       const newFolderName = `${currentCompany.companyname}${currentCompany.projectname}`;
       setFolderName(newFolderName);
     }
-  }, [currentCompany]); // Depend on currentCompany to update folderName
+  }, [currentCompany]); // Depend on current PROJECT
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${ip}/list-uploads`);
+        const response = await fetch(
+          `${ip}/list-uploads?folder=${encodeURIComponent(folderName)}`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+        console.log("companies data from fileupload.jsx", data);
         setFetchedData(data);
       } catch (error) {
         console.error("Failed to fetch:", error);
@@ -39,7 +42,7 @@ function FileUpload() {
     };
 
     fetchData();
-  }, []);
+  }, [folderName]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -92,21 +95,49 @@ function FileUpload() {
   };
 
   const renderFiles = () => {
+    // Check if fetchedData is still loading or null
     if (!fetchedData) return <p>Loading files...</p>;
 
-    const folderData = fetchedData[folderName];
-    if (!folderData) return <p>No files found for the selected folder.</p>;
+    // Check if the fetchedData contains the message indicating no data
+    if ("message" in fetchedData) {
+      return <p>{fetchedData.message}</p>;
+    }
 
-    return Object.entries(folderData).map(([subFolder, detail]) => (
-      <div key={subFolder}>
-        <h3>{subFolder}</h3>
+    // Check if there are any root-level files to be displayed
+    const rootFiles = fetchedData.files ? (
+      <div>
+        <h3>Root Files</h3>
         <ul>
-          {detail.files.map((fileName) => (
+          {fetchedData.files.map((fileName) => (
             <li key={fileName}>{fileName}</li>
           ))}
         </ul>
       </div>
-    ));
+    ) : null;
+
+    // Map through the folder names excluding the 'files' key
+    const folderFiles = Object.entries(fetchedData)
+      .filter(([key]) => key !== "files")
+      .map(([subFolder, detail]) => {
+        return (
+          <div key={subFolder}>
+            <h3>{subFolder}</h3>
+            <ul>
+              {detail.files.map((fileName) => (
+                <li key={fileName}>{fileName}</li>
+              ))}
+            </ul>
+          </div>
+        );
+      });
+
+    // Render both root-level files and subfolders
+    return (
+      <>
+        {rootFiles}
+        {folderFiles}
+      </>
+    );
   };
 
   return (
