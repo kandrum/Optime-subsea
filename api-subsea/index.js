@@ -28,6 +28,7 @@ const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
 const handleFileRequest = require("./controlers/filePathService.js");
+const deleteFile = require("./controlers/fileDeletion.js");
 const PORT = 1226;
 
 // CORS options to allow all origins and all HTTP methods
@@ -235,6 +236,22 @@ app.get("/list-uploads", (req, res) => {
 /* ---------------------------------------- Insert file path ------------------------------- */
 
 app.post("/add-file", handleFileRequest);
+
+/* ---------------------------------------- Delete file ------------------------------- */
+app.delete("/delete-file", (req, res) => {
+  const uploadsDir = path.join(__dirname, "uploads"); // Your uploads directory path
+  // Access the path from the request body instead of req.query
+  const relativeFilePath = req.body.path;
+
+  // Ensure that the path is provided
+  if (!relativeFilePath) {
+    return res.status(400).json({ message: "No path provided" });
+  }
+
+  deleteFile(uploadsDir, relativeFilePath)
+    .then((result) => res.json(result))
+    .catch((error) => res.status(404).json(error));
+});
 
 /* ---------------------------------------- Start the server ------------------------------- */
 app.listen(PORT, "localhost", () => {

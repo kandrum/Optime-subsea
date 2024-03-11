@@ -93,6 +93,29 @@ function FileUpload() {
       alert("Error uploading file.");
     }
   };
+  const handleDeleteFile = async (filePath) => {
+    try {
+      const response = await fetch("http://localhost:1226/delete-file", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ path: filePath }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      alert(result.message);
+      // Optionally refresh the list after deleting
+      // fetchData();
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      alert("Error deleting file.");
+    }
+  };
 
   const renderFiles = () => {
     // Check if fetchedData is still loading or null
@@ -103,33 +126,56 @@ function FileUpload() {
       return <p>{fetchedData.message}</p>;
     }
 
+    // Helper function to get the full path of a file for deletion
+    const getFilePath = (fileName, subFolder) => {
+      return `${folderName}${subFolder ? "/" + subFolder : ""}/${fileName}`;
+    };
+
+    // Helper component to render file with delete icon
+    const FileItem = ({ fileName, subFolder }) => (
+      <li>
+        {fileName}
+        <span
+          onClick={() => handleDeleteFile(getFilePath(fileName, subFolder))}
+          style={{ cursor: "pointer", marginLeft: "10px" }}
+        >
+          🗑️
+        </span>
+      </li>
+    );
+
     // Check if there are any root-level files to be displayed
-    const rootFiles = fetchedData.files ? (
-      <div>
-        <h3>Root Files</h3>
-        <ul>
-          {fetchedData.files.map((fileName) => (
-            <li key={fileName}>{fileName}</li>
-          ))}
-        </ul>
-      </div>
-    ) : null;
+    const rootFiles =
+      fetchedData.files && fetchedData.files.length > 0 ? (
+        <div>
+          <h3>Root Files</h3>
+          <ul>
+            {fetchedData.files.map((fileName) => (
+              <FileItem key={fileName} fileName={fileName} subFolder={null} />
+            ))}
+          </ul>
+        </div>
+      ) : null;
 
     // Map through the folder names excluding the 'files' key
     const folderFiles = Object.entries(fetchedData)
       .filter(([key]) => key !== "files")
-      .map(([subFolder, detail]) => {
-        return (
-          <div key={subFolder}>
-            <h3>{subFolder}</h3>
-            <ul>
-              {detail.files.map((fileName) => (
-                <li key={fileName}>{fileName}</li>
-              ))}
-            </ul>
-          </div>
-        );
-      });
+      .map(([subFolder, detail]) => (
+        <div key={subFolder}>
+          <h3>{subFolder}</h3>
+          <ul>
+            {detail.files && detail.files.length > 0
+              ? detail.files.map((fileName) => (
+                  <FileItem
+                    key={fileName}
+                    fileName={fileName}
+                    subFolder={subFolder}
+                  />
+                ))
+              : null}
+          </ul>
+        </div>
+      ));
 
     // Render both root-level files and subfolders
     return (
