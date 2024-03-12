@@ -18,7 +18,10 @@ function Header() {
   };
 
   return (
-    <div className={styles.headerContainer}>
+    <div
+      className={styles.headerContainer}
+      style={{ backgroundImage: `url(${headerBackground})` }}
+    >
       <h1 className={styles.headerTitle}>Data-Visualization optime subsea </h1>
       <div className={styles.relative}>
         <button onClick={toggleDropdown} className={styles.userButton}>

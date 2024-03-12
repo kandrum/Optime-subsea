@@ -8,7 +8,7 @@
 }
 
 .headerBackground {
-  background-color: #adb5bd; /* Example header background color */
+  background-color: #7693c0; /* Example header background color */
   color: #ffffff; /* White text for contrast */
   padding: 20px;
   text-align: center;
@@ -31,7 +31,7 @@
 
 .contentContainer {
   flex-grow: 1; /* Allow content to take up the remaining space */
-  background-color: #ffffff; /* White background for content */
+  background-color: #dbe4f1; /*#ffffff;  White background for content */
   padding: 20px; /* Spacing inside the content area */
   overflow-y: auto; /* Enable scrolling for overflow content */
 }
