@@ -258,7 +258,7 @@ app.delete("/delete-file", (req, res) => {
   console.log(`Server is running on localhost:${PORT}`);
 }); */
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, "localhost", () => {
   console.log(`Server is running on 0.0.0.0:${PORT}`);
 });
 
