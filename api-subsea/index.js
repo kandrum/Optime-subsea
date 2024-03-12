@@ -254,8 +254,12 @@ app.delete("/delete-file", (req, res) => {
 });
 
 /* ---------------------------------------- Start the server ------------------------------- */
-app.listen(PORT, "localhost", () => {
+/* app.listen(PORT, "localhost", () => {
   console.log(`Server is running on localhost:${PORT}`);
+}); */
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on 0.0.0.0:${PORT}`);
 });
 
 //module.exports.handler = serverless(app);

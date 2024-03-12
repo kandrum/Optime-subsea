@@ -48,7 +48,8 @@ function FileUpload() {
     if (!selectedFile) return; // Exit if no file was selected
 
     // Check if the file is a zip file
-    const isZip = selectedFile.type === "application/x-zip-compressed";
+    // const isZip = selectedFile.type === "application/x-zip-compressed";
+    const isZip = /^application\/.*zip/i.test(selectedFile.type);
 
     console.log(`Selected file type: ${selectedFile.type}`); // Log the MIME type of the file
 
@@ -94,7 +95,7 @@ function FileUpload() {
   };
   const handleDeleteFile = async (filePath) => {
     try {
-      const response = await fetch("http://localhost:1226/delete-file", {
+      const response = await fetch(`${ip}/delete-file`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
