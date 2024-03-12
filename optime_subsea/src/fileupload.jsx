@@ -23,23 +23,23 @@ function FileUpload() {
     }
   }, [currentCompany]); // Depend on current PROJECT
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${ip}/list-uploads?folder=${encodeURIComponent(folderName)}`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log("companies data from fileupload.jsx", data);
-        setFetchedData(data);
-      } catch (error) {
-        console.error("Failed to fetch:", error);
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `${ip}/list-uploads?folder=${encodeURIComponent(folderName)}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
+      const data = await response.json();
+      console.log("companies data from fileupload.jsx", data);
+      setFetchedData(data);
+    } catch (error) {
+      console.error("Failed to fetch:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [folderName]);
 
@@ -87,7 +87,10 @@ function FileUpload() {
       }
 
       const result = await response.json();
+
       alert(result.message);
+      //refreshing the files on upload
+      fetchData();
     } catch (error) {
       console.error("Error uploading file:", error);
       alert("Error uploading file.");
@@ -110,7 +113,7 @@ function FileUpload() {
       const result = await response.json();
       alert(result.message);
       // Optionally refresh the list after deleting
-      // fetchData();
+      fetchData();
     } catch (error) {
       console.error("Error deleting file:", error);
       alert("Error deleting file.");
