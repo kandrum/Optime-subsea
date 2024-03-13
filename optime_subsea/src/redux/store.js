@@ -6,6 +6,7 @@ import userTypeReduce from "./reducers/VerifyReducer";
 import uiReducer from "./reducers/uiReducer";
 import clickAddReducer from "./reducers/addcompanybutton";
 import clickProjectReducer from "./reducers/addProjectButton";
+import currentFolder from "./reducers/currentfolder";
 const rootReducer = combineReducers({
   companies: companiesReducer,
   userType: userTypeReduce,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   ui: uiReducer,
   clickAdd: clickAddReducer,
   clickProjectReducer: clickProjectReducer,
+  currentFolder: currentFolder,
 });
 
 const store = createStore(

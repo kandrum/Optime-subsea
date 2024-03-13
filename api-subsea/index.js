@@ -2,6 +2,7 @@ const serverless = require("serverless-http");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const { readCSVAndExtractData } = require("./controlers/providekeys.js");
 const app = express();
 require("dotenv").config();
 const { checkUser } = require("./controlers/loginControler.js");
@@ -253,11 +254,22 @@ app.delete("/delete-file", (req, res) => {
     .catch((error) => res.status(404).json(error));
 });
 
-/* ---------------------------------------- Start the server ------------------------------- */
-/* app.listen(PORT, "localhost", () => {
-  console.log(`Server is running on localhost:${PORT}`);
-}); */
+/* ---------------------------------------- getkeys  ------------------------------- */
+app.post("/getKeyData", async (req, res) => {
+  const { filePath } = req.body; // Expecting the full file path to be provided in the request body
+  if (!filePath) {
+    return res.status(400).send("File path is required in the request body");
+  }
 
+  try {
+    const data = await readCSVAndExtractData(filePath);
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error processing the CSV file");
+  }
+});
+/* ---------------------------------------- Start the server ------------------------------- */
 app.listen(PORT, "localhost", () => {
   console.log(`Server is running on 0.0.0.0:${PORT}`);
 });

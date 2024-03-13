@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ip } from "./appconstants";
 import styles from "./style/fileupload.module.css";
-
+import { useNavigate } from "react-router-dom";
 function FileUpload() {
   const [file, setFile] = useState(null);
   const [fetchedData, setFetchedData] = useState(null);
   const [uploadEndpoint, setUploadEndpoint] = useState("");
-  const [folderName, setFolderName] = useState("");
+  const [folderName, setFolderName] = useState("SelectTheProject");
   const [formDataKey, setFormDataKey] = useState("file");
+  const dispatch = useDispatch();
   // Accessing userType and currentCompany from Redux store
   const userType = useSelector((state) => state.userType);
   const currentCompany = useSelector(
     (state) => state.currentSelection.currentCompany
   );
-
+  const navigate = useNavigate();
+  const handleAnalyzeClick = () => {
+    navigate("/analyze");
+  };
   useEffect(() => {
     // Construct folderName from currentCompany's details
     if (currentCompany.companyname && currentCompany.projectname) {
       const newFolderName = `${currentCompany.companyname}${currentCompany.projectname}`;
+      dispatch({
+        type: "SET_CURRENT_FOLDER",
+        payload: { folder: newFolderName, path: "pathString" },
+      });
       setFolderName(newFolderName);
     }
   }, [currentCompany]); // Depend on current PROJECT
@@ -45,21 +53,25 @@ function FileUpload() {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    if (!selectedFile) return; // Exit if no file was selected
+    if (!selectedFile) {
+      // If no file is selected, optionally reset to null to remove the style name from the input
+      setFile(null);
+      return; // Exit the function
+    }
 
     // Check if the file is a zip file
-    // const isZip = selectedFile.type === "application/x-zip-compressed";
     const isZip = /^application\/.*zip/i.test(selectedFile.type);
 
     console.log(`Selected file type: ${selectedFile.type}`); // Log the MIME type of the file
 
-    setFile(selectedFile);
+    setFile(selectedFile); // Set the file in state
     // Set the upload endpoint based on whether the file is a zip
     setUploadEndpoint(isZip ? "/upload" : "/otherupload");
-
     // Set the FormData key based on the file type
     const newFormDataKey = isZip ? "zipfile" : "file";
     setFormDataKey(newFormDataKey);
+
+    // Additional logic for handling file selection can be added here if necessary
   };
 
   const handleFileUpload = async () => {
@@ -196,10 +208,16 @@ function FileUpload() {
         <input
           type="file"
           onChange={handleFileChange}
-          className={styles.fileInput}
+          className={file ? "" : styles.fileInput} // Apply styles conditionally
         />
+
         <button onClick={handleFileUpload} className={styles.uploadButton}>
           Upload File
+        </button>
+        <p></p>
+        {/* Analyze button */}
+        <button onClick={handleAnalyzeClick} className={styles.uploadButton}>
+          Analyze
         </button>
       </div>
       <div>
