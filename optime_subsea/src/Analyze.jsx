@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 export default function Analyze() {
   const folderName = useSelector((state) => state.currentFolder.folder);
   const [organizedData, setOrganizedData] = useState({});
+  const [selectedKeys, setSelectedKeys] = useState({});
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     async function fetchKeyData() {
@@ -50,24 +53,48 @@ export default function Analyze() {
     return hierarchy;
   };
 
-  const renderHierarchy = (node) => {
+  const handleCheckboxChange = (key) => {
+    setSelectedKeys((prevSelectedKeys) => ({
+      ...prevSelectedKeys,
+      [key]: !prevSelectedKeys[key],
+    }));
+  };
+
+  const renderHierarchy = (node, path = "") => {
     return (
       <ul>
-        {Object.keys(node).map((key) => (
-          <li key={key}>
-            {key.replace("Platform.", "")}{" "}
-            {/* Removes the 'Platform.' prefix */}
-            {node[key].key && ( // If there is a key, render a button
-              <button onClick={() => console.log(`Key: ${node[key].key}`)}>
-                tag {node[key].key}
-              </button>
-            )}
-            {Object.keys(node[key].subItems).length > 0 &&
-              renderHierarchy(node[key].subItems)}
-          </li>
-        ))}
+        {Object.keys(node).map((key) => {
+          const fullPath = path ? `${path}.${key}` : key;
+          return (
+            <li key={fullPath}>
+              {key.replace("Platform.", "")}
+              {node[key].key && (
+                <>
+                  <button onClick={() => console.log(`Key: ${node[key].key}`)}>
+                    tag {node[key].key}
+                  </button>
+                  <input
+                    type="checkbox"
+                    checked={selectedKeys[node[key].key] || false}
+                    onChange={() => handleCheckboxChange(node[key].key)}
+                  />
+                </>
+              )}
+              {node[key].subItems &&
+                Object.keys(node[key].subItems).length > 0 &&
+                renderHierarchy(node[key].subItems, fullPath)}
+            </li>
+          );
+        })}
       </ul>
     );
+  };
+
+  const handleSubmit = () => {
+    console.log("Selected keys:", selectedKeys);
+    console.log("Start date:", startDate);
+    console.log("End date:", endDate);
+    // Here you would handle the submission of the data, such as sending it to a server or processing it further.
   };
 
   return (
@@ -81,6 +108,23 @@ export default function Analyze() {
         ) : (
           <p>No key data available.</p>
         )}
+      </div>
+      <div>
+        <label htmlFor="start-date">Start Date:</label>
+        <input
+          id="start-date"
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <label htmlFor="end-date">End Date:</label>
+        <input
+          id="end-date"
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+        <button onClick={handleSubmit}>Submit</button>
       </div>
     </div>
   );
