@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 
 export default function Analyze() {
   const folderName = useSelector((state) => state.currentFolder.folder);
-  const [keyData, setKeyData] = useState([]);
   const [organizedData, setOrganizedData] = useState({});
 
   useEffect(() => {
@@ -21,9 +20,7 @@ export default function Analyze() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        const organized = organizeData(data);
-        setKeyData(data); // Keep the original data
-        setOrganizedData(organized); // Set the organized data for rendering
+        setOrganizedData(organizeData(data));
       } catch (error) {
         console.error("Fetching key data failed", error);
       }
@@ -34,10 +31,8 @@ export default function Analyze() {
     }
   }, [folderName]);
 
-  // Function to organize data into a hierarchical structure
   const organizeData = (data) => {
     const hierarchy = {};
-
     data.forEach((item) => {
       const parts = item.platform.split(".");
       let currentLevel = hierarchy;
@@ -52,11 +47,9 @@ export default function Analyze() {
         currentLevel = currentLevel[part].subItems;
       });
     });
-
     return hierarchy;
   };
 
-  // Recursive function to render the hierarchical structure
   const renderHierarchy = (node) => {
     return (
       <ul>
@@ -64,6 +57,11 @@ export default function Analyze() {
           <li key={key}>
             {key.replace("Platform.", "")}{" "}
             {/* Removes the 'Platform.' prefix */}
+            {node[key].key && ( // If there is a key, render a button
+              <button onClick={() => console.log(`Key: ${node[key].key}`)}>
+                tag {node[key].key}
+              </button>
+            )}
             {Object.keys(node[key].subItems).length > 0 &&
               renderHierarchy(node[key].subItems)}
           </li>
