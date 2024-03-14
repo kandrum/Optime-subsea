@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import styles from "./style/Analyze.module.css";
 
 export default function Analyze() {
   const folderName = useSelector((state) => state.currentFolder.folder);
@@ -98,7 +99,7 @@ export default function Analyze() {
   };
 
   return (
-    <div>
+    <div className={styles.AnalyzeContainer}>
       <h1>Analyze Component</h1>
       <p>Folder Name: {folderName || "No folder selected"}</p>
       <div>
@@ -116,6 +117,7 @@ export default function Analyze() {
           type="date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
+          className={styles.BlueDateInput}
         />
         <label htmlFor="end-date">End Date:</label>
         <input
@@ -123,8 +125,11 @@ export default function Analyze() {
           type="date"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
+          className={styles.BlueDateInput}
         />
-        <button onClick={handleSubmit}>Submit</button>
+        <button onClick={handleSubmit} className={styles.BlueButton}>
+          Submit
+        </button>
       </div>
     </div>
   );

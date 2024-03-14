@@ -1,0 +1,134 @@
+/* Overall container styling */
+.AnalyzeContainer {
+  font-family: "Arial", sans-serif;
+  color: #333;
+  padding: 20px;
+  background-color: #fff; /* white background for the container */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 800px; /* max-width for better layout on wider screens */
+  margin: auto; /* center the container */
+}
+
+/* Header styling */
+.AnalyzeContainer h1 {
+  color: #222;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.AnalyzeContainer h2 {
+  color: #222;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+/* List styling */
+.AnalyzeContainer ul {
+  list-style-type: none;
+  padding-left: 20px; /* Added padding for nested lists */
+}
+
+.AnalyzeContainer li {
+  margin: 10px 0;
+  padding: 5px;
+  position: relative;
+  padding-left: 30px; /* Added padding for custom bullet */
+}
+
+/* Custom bullet styling */
+.AnalyzeContainer li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 2px;
+  background-color: #007bff; /* Blue line for custom bullet */
+}
+
+/* Button styling */
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  background-color: #004080;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* Input field styling */
+input[type="date"] {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: block; /* ensures the input field is on a new line */
+}
+
+input[type="date"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Label styling */
+label {
+  display: block;
+  margin-top: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Submit button specific styling */
+.BlueButton {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  display: block; /* ensures the button is on a new line */
+  width: 100%;
+  box-sizing: border-box; /* ensures padding doesn't affect width */
+  margin-top: 10px;
+}
+
+.BlueButton:hover {
+  background-color: #0056b3;
+}
+
+/* Optional: Responsive adjustments */
+@media (max-width: 768px) {
+  .AnalyzeContainer {
+    padding: 10px;
+  }
+
+  .BlueButton {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
