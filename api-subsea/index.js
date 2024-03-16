@@ -7,6 +7,7 @@ const app = express();
 require("dotenv").config();
 const { checkUser } = require("./controlers/loginControler.js");
 const { registerUser } = require("./controlers/registerControler.js");
+
 const {
   uploadMiddleware,
   handleFileUpload,
@@ -21,6 +22,7 @@ const {
   fetchAllProjects,
   deleteProject,
 } = require("./controlers/addProjectService.js");
+const { spawn } = require("child_process");
 const { upload, handleZipUpload } = require("./controlers/zipHandler.js");
 const { listDirectories } = require("./controlers/listFoldersFiles");
 const multer = require("multer");
@@ -269,6 +271,47 @@ app.post("/getKeyData", async (req, res) => {
     res.status(500).send("Error processing the CSV file");
   }
 });
+/* ---------------------------------------- Analyze ------------------------------- */
+app.get("/process-csv", (req, res) => {
+  // Extract query parameters
+  const filePath = req.query.filePath;
+  const tags = req.query.tags; // Assume tags are passed as a comma-separated list
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
+
+  // Spawn Python process with filePath, tags, startDate, and endDate as arguments
+  const pythonProcess = spawn("python", [
+    "./controlers/process_csv.py",
+    filePath,
+    tags, // Pass the tags as a command line argument
+    startDate,
+    endDate,
+  ]);
+
+  let dataString = "";
+  pythonProcess.stdout.on("data", (data) => {
+    dataString += data.toString();
+  });
+
+  pythonProcess.stdout.on("end", () => {
+    try {
+      const jsonData = JSON.parse(dataString);
+      res.json(jsonData);
+    } catch (error) {
+      res.status(500).send("Error processing CSV data");
+    }
+  });
+
+  pythonProcess.stderr.on("data", (data) => {
+    console.error(data.toString());
+  });
+
+  pythonProcess.on("error", (error) => {
+    console.error("Failed to start Python script:", error);
+    res.status(500).send("Failed to process CSV file");
+  });
+});
+
 /* ---------------------------------------- Start the server ------------------------------- */
 app.listen(PORT, "localhost", () => {
   console.log(`Server is running on 0.0.0.0:${PORT}`);

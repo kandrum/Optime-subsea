@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styles from "./style/Analyze.module.css";
-
+import { ip } from "./appconstants";
 export default function Analyze() {
   const folderName = useSelector((state) => state.currentFolder.folder);
   const [organizedData, setOrganizedData] = useState({});
@@ -13,7 +13,7 @@ export default function Analyze() {
     async function fetchKeyData() {
       const filePath = `uploads/${folderName}/mydata/keys.csv`;
       try {
-        const response = await fetch("http://localhost:1226/getKeyData", {
+        const response = await fetch(`${ip}/getKeyData`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -100,7 +100,7 @@ export default function Analyze() {
 
   return (
     <div className={styles.AnalyzeContainer}>
-      <h1>Analyze Component</h1>
+      <h1>Select Keys, Start-Date , End-Data to </h1>
       <p>Folder Name: {folderName || "No folder selected"}</p>
       <div>
         <h2>Key Data</h2>
@@ -128,7 +128,7 @@ export default function Analyze() {
           className={styles.BlueDateInput}
         />
         <button onClick={handleSubmit} className={styles.BlueButton}>
-          Submit
+          Analyze
         </button>
       </div>
     </div>
