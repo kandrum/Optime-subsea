@@ -1,0 +1,63 @@
+/* Graph.module.css */
+.graphsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin: 2rem;
+}
+
+.chartContainer {
+  text-align: center;
+  width: 100%;
+  max-width: 600px; /* Adjust width as necessary */
+  margin: auto;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.pieChartContainer {
+  width: 100%;
+  max-width: 600px; /* Adjust width as necessary */
+  margin: auto;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.chartCanvas {
+  width: 100%;
+  height: auto;
+}
+
+/* Responsive canvas size */
+@media (max-width: 768px) {
+  .chartCanvas {
+    width: 100%;
+    height: 250px; /* Adjust height for smaller devices */
+  }
+}
+
+/* Loader styles */
+.loader {
+  border: 6px solid #f3f3f3; /* Light grey */
+  border-top: 6px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: 20px auto;
+}
+
+/* Animation for the loader */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

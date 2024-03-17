@@ -7,6 +7,7 @@ import uiReducer from "./reducers/uiReducer";
 import clickAddReducer from "./reducers/addcompanybutton";
 import clickProjectReducer from "./reducers/addProjectButton";
 import currentFolder from "./reducers/currentfolder";
+import tagsReducer from "./reducers/tagsreducer";
 const rootReducer = combineReducers({
   companies: companiesReducer,
   userType: userTypeReduce,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   clickAdd: clickAddReducer,
   clickProjectReducer: clickProjectReducer,
   currentFolder: currentFolder,
+  tags: tagsReducer,
 });
 
 const store = createStore(

@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import styles from "./style/Analyze.module.css";
 import { ip } from "./appconstants";
+import Graphs from "./Graphs ";
+import { useNavigate } from "react-router-dom";
+
 export default function Analyze() {
   const folderName = useSelector((state) => state.currentFolder.folder);
   const [organizedData, setOrganizedData] = useState({});
   const [selectedKeys, setSelectedKeys] = useState({});
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     async function fetchKeyData() {
       const filePath = `uploads/${folderName}/mydata/keys.csv`;
@@ -96,6 +100,10 @@ export default function Analyze() {
     console.log("Start date:", startDate);
     console.log("End date:", endDate);
     // Here you would handle the submission of the data, such as sending it to a server or processing it further.
+    dispatch({ type: "SET_SELECTED_KEYS", payload: selectedKeys });
+    dispatch({ type: "SET_START_DATE", payload: startDate });
+    dispatch({ type: "SET_END_DATE", payload: endDate });
+    navigate("/graphs");
   };
 
   return (

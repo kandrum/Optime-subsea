@@ -202,7 +202,7 @@ function FileUpload() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles["container"]}>
       <h1 className={styles.title}>Uploading file for: {folderName}</h1>
       <div className={styles.fileInputContainer}>
         <input

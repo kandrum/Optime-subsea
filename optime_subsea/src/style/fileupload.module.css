@@ -1,78 +1,102 @@
+/* fileupload.module.css */
+
 .container {
-  background-color: #f8f9fa;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
-  max-width: 500px;
-  margin: 20px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 20px;
 }
 
 .title {
-  font-size: 24px;
   color: #333;
-  text-align: center;
+  font-family: "Arial", sans-serif;
   margin-bottom: 20px;
 }
 
 .fileInputContainer {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-bottom: 20px;
 }
 
 .fileInput {
-  border: 1px solid #ced4da;
-  border-radius: 4px;
+  border: 2px dashed #ccc;
   padding: 10px;
-  margin-right: 10px;
-  width: 70%;
+  width: 90%;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: border-color 0.3s;
 }
 
-.uploadButton {
+.fileInput:hover {
+  border-color: #888;
+}
+
+.uploadButton,
+.analyzeButton {
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
   padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-family: "Arial", sans-serif;
+  font-size: 16px;
+  border-radius: 5px;
+  margin: 5px;
+  transition: background-color 0.3s;
 }
 
-.uploadButton:hover {
+.uploadButton:hover,
+.analyzeButton:hover {
   background-color: #0056b3;
 }
 
-.fileListContainer {
-  background-color: #fff;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  padding: 10px;
+.fileDetails {
+  width: 90%;
 }
 
-h2 {
+.fileDetails h3 {
   color: #333;
-  font-size: 20px;
-  margin-top: 0;
-  text-align: left;
-}
-
-h3 {
-  color: #333;
-  font-size: 18px;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  font-family: "Arial", sans-serif;
 }
 
 ul {
-  list-style-type: none;
-  padding-left: 20px;
+  list-style: none;
+  padding: 0;
 }
 
 li {
-  background-color: #e9ecef;
-  border-radius: 4px;
-  padding: 5px 10px;
-  margin-bottom: 5px;
-  word-break: break-all;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li span {
+  font-size: 20px;
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    box-sizing: border-box;
+  }
+
+  .fileInput,
+  .uploadButton,
+  .analyzeButton {
+    width: 100%;
+  }
 }

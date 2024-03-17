@@ -298,7 +298,9 @@ app.get("/process-csv", (req, res) => {
       const jsonData = JSON.parse(dataString);
       res.json(jsonData);
     } catch (error) {
-      res.status(500).send("Error processing CSV data");
+      res
+        .status(500)
+        .send("Dates in the filter not Availabe Choose Some Other Dates");
     }
   });
 

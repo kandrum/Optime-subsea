@@ -1,100 +1,61 @@
-/* style/addcompany.module.css */
+/* Assuming .container is the class for your sidebar container */
 .container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  background-color: #ffffff; /* Change to your preferred sidebar color */
+  padding: 15px;
+  height: 100%; /* Full height of its parent */
+  overflow-y: auto; /* Enables scrolling if the content is taller than the screen */
 }
 
-h2 {
-  color: #333;
-  text-align: center;
+/* Style for company names */
+.company {
+  font-size: 14px; /* Smaller font size for company names */
+  font-weight: bold; /* Makes company names stand out */
+  color: #333; /* Dark color for text */
+  margin-bottom: 5px; /* Space between company name and projects */
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+/* Style for the 'Add Project' button */
+.add-project-btn {
+  font-size: 12px; /* Reduced font size for button text */
+  background-color: #007bff; /* Example blue color */
+  color: white; /* White text */
+  padding: 5px 10px; /* Smaller padding */
+  border: none; /* Removes the border */
+  border-radius: 4px; /* Rounded corners */
+  margin-left: 10px; /* Space from the company name */
+  cursor: pointer; /* Changes cursor to pointer */
 }
 
-input {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+/* Style for project list items */
+.project {
+  font-size: 12px; /* Smaller font size for project names */
+  color: #555; /* Slightly lighter text color for projects */
+  padding: 5px 0; /* Padding for each project */
+  margin-left: 20px; /* Indent project names to distinguish from company names */
+  display: block; /* Projects take full width of the list */
 }
 
-button {
-  padding: 10px 15px;
-  font-size: 16px;
-  color: #fff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+/* Style for delete buttons within project items */
+.delete-project-btn {
+  font-size: 12px; /* Match the font size with other texts */
+  background-color: #dc3545; /* Red color indicating deletion */
+  color: white; /* White text */
+  padding: 3px 6px; /* Smaller padding */
+  border: none; /* Removes the border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Changes cursor to pointer */
+  float: right; /* Aligns the delete button to the right of the project name */
 }
 
-button:hover {
-  background-color: #0056b3;
+/* Clear float */
+.project:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
-/* Add these styles to your existing addcompany.module.css file */
-
-.smallButton {
-  padding: 2px 6px;
-  font-size: 14px;
-  background-color: #5148cc;
-  border-radius: 4px;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.smallButton:hover {
-  background-color: #28ce46;
-}
-
-ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.deleteButton {
-  padding: 2px 6px;
-  font-size: 14px;
-
-  border-radius: 4px;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-.deleteButton:hover {
-  background-color: #d51212;
-}
-
-li {
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-}
-
-li button {
-  margin-left: 10px;
-}
-
-li ul {
-  padding-top: 10px;
-}
-
-li ul li {
-  background-color: #e9ecef;
-  cursor: pointer;
-  margin-top: 5px;
-}
-
-li ul li:hover {
-  background-color: #dde2e6;
+/* Hover effects for interactive elements */
+.add-project-btn:hover,
+.delete-project-btn:hover {
+  opacity: 0.8; /* Slight transparency on hover for feedback */
 }
