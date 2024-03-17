@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { verifyUser } from "./redux/actions/VerifyAction";
 import styles from "./style/Loginstyle.module.css";
-import backgroundImage from "./style/Image2.png"; // Import the background image
+import loginGif from "./login.gif"; // Import the GIF image for background
 import { ip } from "./appconstants";
 
 function Login() {
@@ -52,7 +52,7 @@ function Login() {
 
   // Inline style for the background image
   const containerStyle = {
-    backgroundImage: `url(${backgroundImage})`,
+    backgroundImage: `url(${loginGif})`,
     backgroundSize: "cover",
     backgroundPosition: "center center",
     backgroundRepeat: "no-repeat",
@@ -85,10 +85,7 @@ function Login() {
           />
         </label>
         <br />
-        {errorMessage && (
-          <div className={styles.error}>{errorMessage}</div>
-        )}{" "}
-        {/* Display error message if any */}
+        {errorMessage && <div className={styles.error}>{errorMessage}</div>}
         <div className={styles.buttonContainer}>
           <button type="submit" className={styles.button}>
             Login

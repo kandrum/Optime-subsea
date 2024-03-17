@@ -217,7 +217,7 @@ function FileUpload() {
         <p></p>
         {/* Analyze button */}
         <button onClick={handleAnalyzeClick} className={styles.uploadButton}>
-          Analyze
+          Analyze for {folderName}
         </button>
       </div>
       <div>
