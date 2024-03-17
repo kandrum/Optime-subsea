@@ -25,7 +25,7 @@ export default function Graphs() {
 
     const fetchData = async () => {
       const query = new URLSearchParams({
-        filePath: "./uploads/company subseadatasphere/high-volume/Data.csv",
+        filePath: "./uploads/wiprovisualize/mydata/Data.csv",
         tags: tagsQueryParam,
         startDate,
         endDate,

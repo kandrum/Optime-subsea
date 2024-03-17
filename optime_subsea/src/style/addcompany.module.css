@@ -1,61 +1,133 @@
-/* Assuming .container is the class for your sidebar container */
+/* addcompany.module.css */
+
 .container {
-  background-color: #ffffff; /* Change to your preferred sidebar color */
+  background-color: #f4f7f6;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+}
+
+.addCompanyForm,
+.addProjectForm {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.companyInput,
+.projectInput {
+  flex-grow: 1;
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.addButton {
+  padding: 10px 15px;
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.addButton:hover {
+  background-color: #4cae4c;
+}
+
+.addCompanyButton {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  background-color: #337ab7;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.addCompanyButton:hover {
+  background-color: #286090;
+}
+
+.companiesList {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.companyContainer {
+  background-color: #ffffff;
   padding: 15px;
-  height: 100%; /* Full height of its parent */
-  overflow-y: auto; /* Enables scrolling if the content is taller than the screen */
+  margin-bottom: 15px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Style for company names */
-.company {
-  font-size: 14px; /* Smaller font size for company names */
-  font-weight: bold; /* Makes company names stand out */
-  color: #333; /* Dark color for text */
-  margin-bottom: 5px; /* Space between company name and projects */
+.companyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
-/* Style for the 'Add Project' button */
-.add-project-btn {
-  font-size: 12px; /* Reduced font size for button text */
-  background-color: #007bff; /* Example blue color */
-  color: white; /* White text */
-  padding: 5px 10px; /* Smaller padding */
-  border: none; /* Removes the border */
-  border-radius: 4px; /* Rounded corners */
-  margin-left: 10px; /* Space from the company name */
-  cursor: pointer; /* Changes cursor to pointer */
+.companyName {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: bold;
 }
 
-/* Style for project list items */
-.project {
-  font-size: 12px; /* Smaller font size for project names */
-  color: #555; /* Slightly lighter text color for projects */
-  padding: 5px 0; /* Padding for each project */
-  margin-left: 20px; /* Indent project names to distinguish from company names */
-  display: block; /* Projects take full width of the list */
+.deleteButton {
+  padding: 5px 10px;
+  background-color: #ece1e1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-/* Style for delete buttons within project items */
-.delete-project-btn {
-  font-size: 12px; /* Match the font size with other texts */
-  background-color: #dc3545; /* Red color indicating deletion */
-  color: white; /* White text */
-  padding: 3px 6px; /* Smaller padding */
-  border: none; /* Removes the border */
-  border-radius: 4px; /* Rounded corners */
-  cursor: pointer; /* Changes cursor to pointer */
-  float: right; /* Aligns the delete button to the right of the project name */
+.deleteButton:hover {
+  background-color: #c9302c;
 }
 
-/* Clear float */
-.project:after {
-  content: "";
-  display: table;
-  clear: both;
+.addProjectButton {
+  padding: 5px 10px;
+  background-color: #f0ad4e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-/* Hover effects for interactive elements */
-.add-project-btn:hover,
-.delete-project-btn:hover {
-  opacity: 0.8; /* Slight transparency on hover for feedback */
+.addProjectButton:hover {
+  background-color: #ec971f;
 }
+
+.projectsList {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+.projectItem {
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.projectItem:hover {
+  background-color: #dde5e5;
+}
+
+.projectName {
+  color: #555;
+}
+
+/* You can add media queries here for responsiveness if needed */

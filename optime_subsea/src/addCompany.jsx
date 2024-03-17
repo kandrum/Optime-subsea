@@ -165,28 +165,58 @@ function AddCompanyAndProjectForm() {
   return (
     <div className={styles.container}>
       {showCompanyInput ? (
-        <form onSubmit={handleAddCompany}>
+        <form onSubmit={handleAddCompany} className={styles.addCompanyForm}>
           <input
             type="text"
+            className={styles.companyInput}
             value={newCompanyName}
             onChange={(e) => setNewCompanyName(e.target.value)}
+            placeholder="Enter company name"
             required
           />
-          <button type="submit">Add Company</button>
+          <button type="submit" className={styles.addButton}>
+            Add Company
+          </button>
         </form>
       ) : (
         <button
           onClick={() => setShowCompanyInput(true)}
-          className={styles.smallButton}
+          className={styles.addCompanyButton}
         >
           + Add Company
         </button>
       )}
 
-      <ul>
+      <div className={styles.companiesList}>
         {companies.map((company) => (
-          <li key={company.companyid}>
-            {company.companyname}
+          <div key={company.companyid} className={styles.companyContainer}>
+            <div className={styles.companyHeader}>
+              <span className={styles.companyName}>{company.companyname}</span>
+              <button
+                onClick={() => handleDeleteCompany(company.companyid)}
+                className={styles.deleteButton}
+              >
+                🗑️
+              </button>
+            </div>
+            {showProjectInput[company.companyid] && (
+              <form
+                onSubmit={(e) => handleAddProject(e, company.companyid)}
+                className={styles.addProjectForm}
+              >
+                <input
+                  type="text"
+                  className={styles.projectInput}
+                  value={newProjectName}
+                  onChange={(e) => setNewProjectName(e.target.value)}
+                  placeholder="Enter project name"
+                  required
+                />
+                <button type="submit" className={styles.addButton}>
+                  Add Project
+                </button>
+              </form>
+            )}
             <button
               onClick={() =>
                 setShowProjectInput({
@@ -194,55 +224,40 @@ function AddCompanyAndProjectForm() {
                   [company.companyid]: true,
                 })
               }
-              className={styles.smallButton}
+              className={styles.addProjectButton}
             >
               + Add Project
             </button>
-            <button
-              onClick={() => handleDeleteCompany(company.companyid)}
-              className={styles.deleteButton}
-            >
-              🗑️
-            </button>
-            {showProjectInput[company.companyid] && (
-              <form onSubmit={(e) => handleAddProject(e, company.companyid)}>
-                <input
-                  type="text"
-                  value={newProjectName}
-                  onChange={(e) => setNewProjectName(e.target.value)}
-                  required
-                />
-                <button type="submit">Add Project</button>
-              </form>
-            )}
-            <ul>
+            <div className={styles.projectsList}>
               {projects
                 .filter((project) => project.companyid === company.companyid)
                 .map((project) => (
-                  <li
-                    key={project.projectid}
-                    onClick={() =>
-                      handleProjectClick(
-                        company.companyid,
-                        project.projectid,
-                        company.companyname,
-                        project.name
-                      )
-                    }
-                  >
-                    {project.name}
+                  <div key={project.projectid} className={styles.projectItem}>
+                    <span
+                      onClick={() =>
+                        handleProjectClick(
+                          company.companyid,
+                          project.projectid,
+                          company.companyname,
+                          project.name
+                        )
+                      }
+                      className={styles.projectName}
+                    >
+                      {project.name}
+                    </span>
                     <button
                       onClick={() => handleDeleteProject(project.projectid)}
-                      className={styles.deleteButton} // Consider styling appropriately
+                      className={styles.deleteButton}
                     >
                       🗑️
                     </button>
-                  </li>
+                  </div>
                 ))}
-            </ul>
-          </li>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
