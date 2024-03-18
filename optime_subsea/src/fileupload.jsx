@@ -154,7 +154,7 @@ function FileUpload() {
     const FileItem = ({ fileName, subFolder }) => (
       <li>
         {fileName}
-        {userType === "admin" && (
+        {(userType === "admin" || userType === "supervisor") && (
           <span
             onClick={() => handleDeleteFile(getFilePath(fileName, subFolder))}
             style={{ cursor: "pointer", marginLeft: "10px" }}
