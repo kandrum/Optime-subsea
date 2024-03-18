@@ -6,7 +6,11 @@ const { readCSVAndExtractData } = require("./controlers/providekeys.js");
 const app = express();
 require("dotenv").config();
 const { checkUser } = require("./controlers/loginControler.js");
-const { registerUser } = require("./controlers/registerControler.js");
+const {
+  registerUser,
+  fetchAllUsers,
+  updateUserActivation,
+} = require("./controlers/registerControler.js");
 
 const {
   uploadMiddleware,
@@ -37,7 +41,7 @@ const PORT = 1226;
 // CORS options to allow all origins and all HTTP methods
 const corsOptions = {
   origin: "*", // Allow all origins
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow all HTTP methods
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"], // Allow all HTTP methods
   allowedHeaders: ["Content-Type", "Authorization"], // You can adjust the headers as needed
   credentials: true, // This allows cookies to be sent alongside requests, if needed
   optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
@@ -54,10 +58,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Define routes
 app.get("/", (req, res) => {
   res.send("Welcome to the API!");
-});
-
-app.get("/api/data", (req, res) => {
-  res.json({ message: "Here is some data" });
 });
 
 app.post("/logincheck", (req, res) => {
@@ -83,7 +83,9 @@ app.post("/logincheck", (req, res) => {
 });
 //creating a new router to recive data from frontend
 app.post("/register", registerUser);
-
+// Endpoint to get all users
+app.get("/getallusers", fetchAllUsers);
+app.patch("/updateActivation", updateUserActivation);
 /* ---------------------------- POST endpoint to add a company --------------------------- */
 app.post("/addcompany", (req, res) => {
   const { companyname, userid } = req.body;

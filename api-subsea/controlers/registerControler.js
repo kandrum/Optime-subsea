@@ -30,4 +30,48 @@ async function registerUser(req, res) {
   }
 }
 
-module.exports = { registerUser };
+async function fetchAllUsers(req, res) {
+  try {
+    const query = "SELECT userid, username, role, isActive FROM users";
+    const [users] = await pool.query(query);
+
+    console.log("Fetched all users successfully");
+    res.status(200).json(users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    res.status(500).json({ message: "An error occurred while fetching users" });
+  }
+}
+
+async function updateUserActivation(req, res) {
+  const { userid, isActive } = req.body;
+
+  // Check if isActive is either "Y" or "N"
+  if (!["Y", "N"].includes(isActive)) {
+    return res
+      .status(400)
+      .json({ message: "Invalid activation status provided" });
+  }
+
+  try {
+    const query = "UPDATE users SET isActive = ? WHERE userid = ?";
+    const [result] = await pool.query(query, [isActive, userid]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log(`User activation updated successfully for userid: ${userid}`);
+    res.status(200).json({
+      message: `User ${userid} activation updated successfully`,
+      userid: userid,
+    });
+  } catch (err) {
+    console.error("Error updating user activation:", err);
+    res
+      .status(500)
+      .json({ message: "An error occurred during the activation update" });
+  }
+}
+
+module.exports = { registerUser, fetchAllUsers, updateUserActivation };

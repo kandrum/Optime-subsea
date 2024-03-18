@@ -11,6 +11,10 @@ function AddCompanyAndProjectForm() {
   const [newCompanyName, setNewCompanyName] = useState("");
   const [newProjectName, setNewProjectName] = useState("");
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
+  const [userType2, setuserType2] = useState(
+    useSelector((state) => state.userType.result.role)
+  );
+  console.log("afrom add company.jsx", userType2);
   const userType = useSelector((state) => state.userType);
   const [userID, setUserId] = useState(userType.result.userId);
   const dispatch = useDispatch();
@@ -164,70 +168,80 @@ function AddCompanyAndProjectForm() {
 
   return (
     <div className={styles.container}>
-      {showCompanyInput ? (
-        <form onSubmit={handleAddCompany} className={styles.addCompanyForm}>
-          <input
-            type="text"
-            className={styles.companyInput}
-            value={newCompanyName}
-            onChange={(e) => setNewCompanyName(e.target.value)}
-            placeholder="Enter company name"
-            required
-          />
-          <button type="submit" className={styles.addButton}>
-            Add Company
+      {/* Conditionally show Add Company button/input for 'admin', based on userType2 */}
+      {userType2 === "admin" &&
+        (showCompanyInput ? (
+          <form onSubmit={handleAddCompany} className={styles.addCompanyForm}>
+            <input
+              type="text"
+              className={styles.companyInput}
+              value={newCompanyName}
+              onChange={(e) => setNewCompanyName(e.target.value)}
+              placeholder="Enter company name"
+              required
+            />
+            <button type="submit" className={styles.addButton}>
+              Add Company
+            </button>
+          </form>
+        ) : (
+          <button
+            onClick={() => setShowCompanyInput(true)}
+            className={styles.addCompanyButton}
+          >
+            + Add Company
           </button>
-        </form>
-      ) : (
-        <button
-          onClick={() => setShowCompanyInput(true)}
-          className={styles.addCompanyButton}
-        >
-          + Add Company
-        </button>
-      )}
+        ))}
 
       <div className={styles.companiesList}>
         {companies.map((company) => (
           <div key={company.companyid} className={styles.companyContainer}>
             <div className={styles.companyHeader}>
               <span className={styles.companyName}>{company.companyname}</span>
-              <button
-                onClick={() => handleDeleteCompany(company.companyid)}
-                className={styles.deleteButton}
-              >
-                🗑️
-              </button>
-            </div>
-            {showProjectInput[company.companyid] && (
-              <form
-                onSubmit={(e) => handleAddProject(e, company.companyid)}
-                className={styles.addProjectForm}
-              >
-                <input
-                  type="text"
-                  className={styles.projectInput}
-                  value={newProjectName}
-                  onChange={(e) => setNewProjectName(e.target.value)}
-                  placeholder="Enter project name"
-                  required
-                />
-                <button type="submit" className={styles.addButton}>
-                  Add Project
+              {/* Conditionally show Delete Company button for 'admin', based on userType2 */}
+              {userType2 === "admin" && (
+                <button
+                  onClick={() => handleDeleteCompany(company.companyid)}
+                  className={styles.deleteButton}
+                >
+                  🗑️
                 </button>
-              </form>
+              )}
+            </div>
+            {/* Conditionally show Add Project button/input for 'admin', based on userType2 */}
+            {userType2 === "admin" && (
+              <>
+                {showProjectInput[company.companyid] && (
+                  <form
+                    onSubmit={(e) => handleAddProject(e, company.companyid)}
+                    className={styles.addProjectForm}
+                  >
+                    <input
+                      type="text"
+                      className={styles.projectInput}
+                      value={newProjectName}
+                      onChange={(e) => setNewProjectName(e.target.value)}
+                      placeholder="Enter project name"
+                      required
+                    />
+                    <button type="submit" className={styles.addButton}>
+                      Add Project
+                    </button>
+                  </form>
+                )}
+                <button
+                  onClick={() =>
+                    setShowProjectInput({
+                      ...showProjectInput,
+                      [company.companyid]: true,
+                    })
+                  }
+                  className={styles.addProjectButton}
+                >
+                  + Add Project
+                </button>
+              </>
             )}
-            <button
-              onClick={() =>
-                setShowProjectInput({
-                  ...showProjectInput,
-                  [company.companyid]: true,
-                })
-              }
-              className={styles.addProjectButton}
-            >
-              + Add Project
-            </button>
             <div className={styles.projectsList}>
               {projects
                 .filter((project) => project.companyid === company.companyid)
@@ -246,12 +260,15 @@ function AddCompanyAndProjectForm() {
                     >
                       {project.name}
                     </span>
-                    <button
-                      onClick={() => handleDeleteProject(project.projectid)}
-                      className={styles.deleteButton}
-                    >
-                      🗑️
-                    </button>
+                    {/* Conditionally show Delete Project button for 'admin', based on userType2 */}
+                    {userType2 === "admin" && (
+                      <button
+                        onClick={() => handleDeleteProject(project.projectid)}
+                        className={styles.deleteButton}
+                      >
+                        🗑️
+                      </button>
+                    )}
                   </div>
                 ))}
             </div>

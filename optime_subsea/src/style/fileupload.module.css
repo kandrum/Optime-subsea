@@ -8,12 +8,12 @@
   padding: 20px;
   background-color: #f5f5f5;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: rgb(40, 184, 155);
   margin: 20px;
 }
 
 .title {
-  color: #333;
+  color: rgb(224, 234, 232);
   font-family: "Arial", sans-serif;
   margin-bottom: 20px;
 }
@@ -24,6 +24,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+  color: rgb(221, 229, 228);
 }
 
 .fileInput {
@@ -63,10 +64,12 @@
 }
 
 .fileDetails h3 {
-  color: #333;
+  color: rgb(214, 234, 230);
   font-family: "Arial", sans-serif;
 }
-
+.filedetails {
+  color: rgb(69, 185, 162);
+}
 ul {
   list-style: none;
   padding: 0;

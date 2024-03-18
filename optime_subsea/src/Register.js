@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style/Registerstyle.css";
-
+import loginGif from "./lofingif.gif";
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +38,10 @@ function Register() {
   };
 
   return (
-    <div className="background-container">
+    <div
+      className="background-container"
+      style={{ backgroundImage: `url(${loginGif})` }}
+    >
       <form onSubmit={handleSubmit} className="form-container">
         <div className="mb-4">
           <label htmlFor="username" className="form-label">

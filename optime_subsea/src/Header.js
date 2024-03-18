@@ -9,12 +9,17 @@ function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userType = useSelector((state) => state.userType);
+  const [userType, setuserType] = useState(
+    useSelector((state) => state.userType.result.role)
+  );
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   const goToLogin = () => {
     navigate("/");
+  };
+  const goToActivate = () => {
+    navigate("/activate");
   };
 
   return (
@@ -29,12 +34,12 @@ function Header() {
         </button>
         {isDropdownOpen && (
           <div className={styles.dropdownMenu}>
-            <a href="#" className={styles.dropdownLink}>
-              Settings
-            </a>
-            <a href="#" className={styles.dropdownLink}>
-              Help
-            </a>
+            {/* Render Activate button only for admin users */}
+            {userType === "admin" && (
+              <button onClick={goToActivate} className={styles.dropdownLink}>
+                Activate
+              </button>
+            )}
             <button onClick={goToLogin} className={styles.dropdownLink}>
               Logout
             </button>

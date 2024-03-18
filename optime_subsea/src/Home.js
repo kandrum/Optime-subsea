@@ -7,6 +7,7 @@ import AddCompanyAndProjectForm from "./addCompany";
 import headerBackground from "./header.jpg";
 import sidebar from "./sidebar.jpg";
 import FileUpload from "./fileupload";
+import gif from "./login.gif";
 function Home() {
   // Redux selectors and useEffect hook here
 

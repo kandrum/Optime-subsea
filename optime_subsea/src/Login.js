@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { verifyUser } from "./redux/actions/VerifyAction";
 import styles from "./style/Loginstyle.module.css";
-import loginGif from "./login.gif"; // Import the GIF image for background
+import loginGif from "./lofingif.gif"; // Import the GIF image for background
 import { ip } from "./appconstants";
 
 function Login() {

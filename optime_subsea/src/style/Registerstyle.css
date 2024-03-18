@@ -1,0 +1,57 @@
+.background-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5; /* Light grey background */
+}
+
+.form-container {
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  width: 100%;
+  max-width: 400px; /* Max width for the form */
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333; /* Dark grey color for text */
+  font-size: 1rem; /* Base font size */
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem; /* Space between form fields */
+  border-radius: 4px; /* Slightly rounded corners for inputs */
+  border: 1px solid #ccc; /* Light grey border */
+  font-size: 1rem;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #007bff; /* Highlight color when focused */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Glow effect on focus */
+}
+
+.submit-button {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 1.2rem;
+  background-color: #007bff; /* Bootstrap blue */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s; /* Smooth transition for hover effect */
+}
+
+.submit-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}

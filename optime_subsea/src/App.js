@@ -4,7 +4,7 @@ import Login from "./Login";
 import Home from "./Home";
 import Analyze from "./Analyze";
 import Graphs from "./Graphs ";
-
+import Activate from "./Activate";
 import Register from "./Register";
 
 function App() {
@@ -18,6 +18,7 @@ function App() {
             <Route path="/analyze" element={<Analyze />} />
             <Route path="/register" element={<Register />} />
             <Route path="/graphs" element={<Graphs />} />
+            <Route path="/activate" element={<Activate />} />
           </Routes>
         </header>
       </div>

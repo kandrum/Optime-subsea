@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ip } from "./appconstants";
 import styles from "./style/fileupload.module.css";
 import { useNavigate } from "react-router-dom";
+import gif from "./login.gif";
 function FileUpload() {
   const [file, setFile] = useState(null);
   const [fetchedData, setFetchedData] = useState(null);
@@ -11,7 +12,10 @@ function FileUpload() {
   const [formDataKey, setFormDataKey] = useState("file");
   const dispatch = useDispatch();
   // Accessing userType and currentCompany from Redux store
-  const userType = useSelector((state) => state.userType);
+  const [userType, setuserType] = useState(
+    useSelector((state) => state.userType.result.role)
+  );
+  /* --------------------------------------------------------------------------------------------- */
   const currentCompany = useSelector(
     (state) => state.currentSelection.currentCompany
   );
@@ -150,12 +154,14 @@ function FileUpload() {
     const FileItem = ({ fileName, subFolder }) => (
       <li>
         {fileName}
-        <span
-          onClick={() => handleDeleteFile(getFilePath(fileName, subFolder))}
-          style={{ cursor: "pointer", marginLeft: "10px" }}
-        >
-          🗑️
-        </span>
+        {userType === "admin" && (
+          <span
+            onClick={() => handleDeleteFile(getFilePath(fileName, subFolder))}
+            style={{ cursor: "pointer", marginLeft: "10px" }}
+          >
+            🗑️
+          </span>
+        )}
       </li>
     );
 
@@ -202,25 +208,34 @@ function FileUpload() {
   };
 
   return (
-    <div className={styles["container"]}>
+    <div
+      className={styles["container"]}
+      style={{ backgroundImage: `url(${gif})` }}
+    >
       <h1 className={styles.title}>Uploading file for: {folderName}</h1>
       <div className={styles.fileInputContainer}>
-        <input
-          type="file"
-          onChange={handleFileChange}
-          className={file ? "" : styles.fileInput} // Apply styles conditionally
-        />
+        {/* Conditional rendering of the file input based on userType */}
+        {(userType === "admin" || userType === "supervisor") && (
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className={file ? "" : styles.fileInput}
+          />
+        )}
 
-        <button onClick={handleFileUpload} className={styles.uploadButton}>
-          Upload File
-        </button>
-        <p></p>
+        {/* Conditional rendering based on userType */}
+        {(userType === "admin" || userType === "supervisor") && (
+          <button onClick={handleFileUpload} className={styles.uploadButton}>
+            Upload File
+          </button>
+        )}
+
         {/* Analyze button */}
         <button onClick={handleAnalyzeClick} className={styles.uploadButton}>
           Analyze for {folderName}
         </button>
       </div>
-      <div>
+      <div className={styles["filedetails"]}>
         <h2>File Details</h2>
         {renderFiles()}
       </div>

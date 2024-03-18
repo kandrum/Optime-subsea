@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Chart, registerables } from "chart.js";
+import { ip } from "./appconstants";
 import styles from "./style/Graph.module.css";
 
 Chart.register(...registerables);
@@ -10,6 +11,7 @@ export default function Graphs() {
   const [chartData, setChartData] = useState(null);
   const tagsState = useSelector((state) => state.tags);
   const { selectedKeys, startDate, endDate } = tagsState;
+  const folderName = useSelector((state) => state.currentFolder.folder);
 
   // Refs for the charts to manage instances
   const chartRefs = useRef(new Map());
@@ -25,12 +27,12 @@ export default function Graphs() {
 
     const fetchData = async () => {
       const query = new URLSearchParams({
-        filePath: "./uploads/wiprovisualize/mydata/Data.csv",
+        filePath: `./uploads/${folderName}/mydata/Data.csv`,
         tags: tagsQueryParam,
         startDate,
         endDate,
       }).toString();
-      const url = `http://localhost:1226/process-csv?${query}`;
+      const url = `${ip}/process-csv?${query}`;
 
       try {
         const response = await fetch(url);
