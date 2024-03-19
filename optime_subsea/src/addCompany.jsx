@@ -209,7 +209,7 @@ function AddCompanyAndProjectForm() {
               )}
             </div>
             {/* Conditionally show Add Project button/input for 'admin', based on userType2 */}
-            {userType2 === "admin" && (
+            {(userType2 === "admin" || userType2 === "supervisor") && (
               <>
                 {showProjectInput[company.companyid] && (
                   <form
@@ -261,7 +261,7 @@ function AddCompanyAndProjectForm() {
                       {project.name}
                     </span>
                     {/* Conditionally show Delete Project button for 'admin', based on userType2 */}
-                    {userType2 === "admin" && (
+                    {(userType2 === "admin" || userType2 === "super visor") && (
                       <button
                         onClick={() => handleDeleteProject(project.projectid)}
                         className={styles.deleteButton}
