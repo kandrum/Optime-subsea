@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style/Registerstyle.css";
 import loginGif from "./lofingif.gif";
+import { ip } from "./appconstants";
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -11,7 +12,7 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:1226/register", {
+      const response = await fetch(`${ip}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +26,7 @@ function Register() {
 
       const data = await response.json();
       if (response.ok) {
-        navigate("/");
+        navigate("/caps24g12");
         // Handle successful registration (e.g., navigate to login page)
       } else {
         console.error("Registration failed", data.message);
