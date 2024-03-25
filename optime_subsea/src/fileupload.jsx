@@ -6,116 +6,126 @@ import { useNavigate } from "react-router-dom";
 import gif from "./login.gif";
 
 function FileUpload() {
-    const [file, setFile] = useState(null);
-    const [fetchedData, setFetchedData] = useState(null);
-    const [uploadEndpoint, setUploadEndpoint] = useState("");
-    const [folderName, setFolderName] = useState("SelectTheProject");
-    const [formDataKey, setFormDataKey] = useState("file");
-    const [isLoading, setIsLoading] = useState(false);
-    const dispatch = useDispatch();
-    
-    const userType = useSelector((state) => state.userType.result.role);
-    const currentCompany = useSelector((state) => state.currentSelection.currentCompany);
-    const navigate = useNavigate();
+  const [file, setFile] = useState(null);
+  const [fetchedData, setFetchedData] = useState(null);
+  const [uploadEndpoint, setUploadEndpoint] = useState("");
+  const [folderName, setFolderName] = useState("SelectTheProject");
+  const [formDataKey, setFormDataKey] = useState("file");
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (currentCompany.companyname && currentCompany.projectname) {
-            const newFolderName = `${currentCompany.companyname}${currentCompany.projectname}`;
-            dispatch({
-                type: "SET_CURRENT_FOLDER",
-                payload: { folder: newFolderName, path: "pathString" },
-            });
-            setFolderName(newFolderName);
-        }
-    }, [currentCompany, dispatch]);
+  const userType = useSelector((state) => state.userType.result.role);
+  const currentCompany = useSelector(
+    (state) => state.currentSelection.currentCompany
+  );
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchData();
-    }, [folderName]);
+  useEffect(() => {
+    if (currentCompany.companyname && currentCompany.projectname) {
+      const newFolderName = `${currentCompany.companyname}${currentCompany.projectname}`;
+      dispatch({
+        type: "SET_CURRENT_FOLDER",
+        payload: { folder: newFolderName, path: "pathString" },
+      });
+      setFolderName(newFolderName);
+    }
+  }, [currentCompany, dispatch]);
 
-    const handleAnalyzeClick = () => {
-        navigate("/analyze");
-    };
+  useEffect(() => {
+    fetchData();
+  }, [folderName]);
 
-    const fetchData = async () => {
-        try {
-            const response = await fetch(`${ip}/list-uploads?folder=${encodeURIComponent(folderName)}`);
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            const data = await response.json();
-            setFetchedData(data);
-        } catch (error) {
-            console.error("Failed to fetch:", error);
-        }
-    };
+  const handleAnalyzeClick = () => {
+    navigate("/analyze");
+  };
 
-    const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-        if (!selectedFile) {
-            setFile(null);
-            return;
-        }
-        const isZip = /^application\/.*zip/i.test(selectedFile.type);
-        setFile(selectedFile);
-        setUploadEndpoint(isZip ? "/upload" : "/otherupload");
-        setFormDataKey(isZip ? "zipfile" : "file");
-    };
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `${ip}/list-uploads?folder=${encodeURIComponent(folderName)}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setFetchedData(data);
+    } catch (error) {
+      console.error("Failed to fetch:", error);
+    }
+  };
 
-    const handleFileUpload = async () => {
-        if (!file) {
-            alert("Please select a file first!");
-            return;
-        }
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) {
+      setFile(null);
+      return;
+    }
+    const isZip = /^application\/.*zip/i.test(selectedFile.type);
+    setFile(selectedFile);
+    setUploadEndpoint(isZip ? "/upload" : "/otherupload");
+    setFormDataKey(isZip ? "zipfile" : "file");
+  };
 
-        setIsLoading(true);
-        try {
-            const formData = new FormData();
-            formData.append(formDataKey, file);
-            formData.append("folderName", folderName);
+  const handleFileUpload = async () => {
+    if (!file) {
+      alert("Please select a file first!");
+      return;
+    }
 
-            const response = await fetch(`${ip}${uploadEndpoint}`, {
-                method: "POST",
-                body: formData,
-            });
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append(formDataKey, file);
+      formData.append("folderName", folderName);
 
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
+      const response = await fetch(`${ip}${uploadEndpoint}`, {
+        method: "POST",
+        body: formData,
+      });
 
-            const result = await response.json();
-            alert(result.message);
-        } catch (error) {
-            console.error("Error uploading file:", error);
-            alert("Error uploading file.");
-        } finally {
-            setIsLoading(false);
-            fetchData();
-        }
-    };
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
 
-    const handleDeleteFile = async (filePath) => {
-        try {
-            const response = await fetch(`${ip}/delete-file`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ path: filePath }),
-            });
+      const result = await response.json();
+      alert(result.message);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Error uploading file.");
+    } finally {
+      setIsLoading(false);
+      fetchData();
+    }
+  };
 
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
+  const handleDeleteFile = async (filePath) => {
+    try {
+      const response = await fetch(`${ip}/delete-file`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ path: filePath }),
+      });
 
-            const result = await response.json();
-            alert(result.message);
-            fetchData();
-        } catch (error) {
-            console.error("Error deleting file:", error);
-            alert("Error deleting file.");
-        }
-    };
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      alert(result.message);
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      alert("Error deleting file.");
+    }
+  };
+  const handleFileooClick = async (filePath) => {
+    // Here you can either display the file content directly
+    // or provide a download link depending on the file type
+    const fileUrl = `${ip}/files/${encodeURIComponent(filePath)}`;
+    window.open(fileUrl, "_blank");
+  };
 
   const renderFiles = () => {
     // Check if fetchedData is still loading or null
@@ -133,7 +143,10 @@ function FileUpload() {
 
     // Helper component to render file with delete icon
     const FileItem = ({ fileName, subFolder }) => (
-      <li>
+      <li
+        onClick={() => handleFileooClick(getFilePath(fileName, subFolder))}
+        style={{ cursor: "pointer" }}
+      >
         {fileName}
         {(userType === "admin" || userType === "supervisor") && (
           <span
@@ -189,28 +202,39 @@ function FileUpload() {
   };
 
   return (
-    <div className={styles["container"]} style={{ backgroundImage: `url(${gif})` }}>
-        <h1 className={styles.title}>Uploading file for: {folderName}</h1>
-        <div className={styles.fileInputContainer}>
-            {(userType === "admin" || userType === "supervisor") && (
-                <>
-                    <input type="file" onChange={handleFileChange} className={file ? "" : styles.fileInput} />
-                    <button onClick={handleFileUpload} className={styles.uploadButton} disabled={isLoading}>
-                        Upload File
-                    </button>
-                </>
-            )}
-            <button onClick={handleAnalyzeClick} className={styles.uploadButton}>
-                Analyze for {folderName}
+    <div
+      className={styles["container"]}
+      style={{ backgroundImage: `url(${gif})` }}
+    >
+      <h1 className={styles.title}>Uploading file for: {folderName}</h1>
+      <div className={styles.fileInputContainer}>
+        {(userType === "admin" || userType === "supervisor") && (
+          <>
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className={file ? "" : styles.fileInput}
+            />
+            <button
+              onClick={handleFileUpload}
+              className={styles.uploadButton}
+              disabled={isLoading}
+            >
+              Upload File
             </button>
-            {isLoading && <div className={styles.loader}></div>}
-        </div>
-        <div className={styles["filedetails"]}>
-            <h2>File Details</h2>
-            {renderFiles()}
-        </div>
+          </>
+        )}
+        <button onClick={handleAnalyzeClick} className={styles.uploadButton}>
+          Analyze for {folderName}
+        </button>
+        {isLoading && <div className={styles.loader}></div>}
+      </div>
+      <div className={styles["filedetails"]}>
+        <h2>File Details</h2>
+        {renderFiles()}
+      </div>
     </div>
-);
+  );
 }
 
 export default FileUpload;

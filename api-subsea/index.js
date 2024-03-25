@@ -316,6 +316,25 @@ app.get("/process-csv", (req, res) => {
   });
 });
 
+/* ----------------------------------------  ------------------------------- */
+
+// Serve files dynamically from the uploads directory
+app.get("/files/:filePath", (req, res) => {
+  const filePath = req.params.filePath;
+  const fullPath = path.resolve(`uploads/${filePath}`);
+
+  // Validate filePath here to prevent directory traversal attacks
+
+  // Check if file exists
+  if (fs.existsSync(fullPath)) {
+    // Serve the file
+    res.sendFile(fullPath);
+  } else {
+    // Handle case where the file does not exist
+    res.status(404).send("File not found");
+  }
+});
+
 /* ---------------------------------------- Start the server ------------------------------- */
 app.listen(PORT, "localhost", () => {
   console.log(`Server is running on 0.0.0.0:${PORT}`);
