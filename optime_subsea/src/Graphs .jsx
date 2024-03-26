@@ -15,7 +15,7 @@ export default function Graphs() {
 
   // Refs for the charts to manage instances
   const chartRefs = useRef(new Map());
-  const pieChartRef = useRef(null);
+  const combinedLineChartRef = useRef(null);
 
   useEffect(() => {
     if (!selectedKeys || !startDate || !endDate) return;
@@ -57,30 +57,28 @@ export default function Graphs() {
       chartRefs.current.forEach((chart) => chart.destroy());
       chartRefs.current.clear();
 
-      // Set up pie chart for average values of all tags
-      if (pieChartRef.current) {
-        const ctx = pieChartRef.current.getContext("2d");
-        const pieData = Object.values(chartData).map((data) => data.average);
-        const pieLabels = Object.keys(chartData);
-        const pieChart = new Chart(ctx, {
-          type: "pie",
+      // Set up combined line chart for average values of all tags
+      if (combinedLineChartRef.current) {
+        const ctx = combinedLineChartRef.current.getContext("2d");
+        const chart = new Chart(ctx, {
+          type: "line",
           data: {
-            labels: pieLabels.map((label) => `Tag ${label}`),
+            labels: Object.keys(chartData).map((tag) => `Tag ${tag}`),
             datasets: [
               {
-                data: pieData,
-                backgroundColor: pieLabels.map(
-                  (_, index) =>
-                    `hsl(${(index / pieData.length) * 360}, 70%, 50%)`
-                ),
+                label: "Average Valuekkl",
+                data: Object.values(chartData).map((data) => data.average),
+                fill: false,
+                borderColor: "rgb(75, 192, 192)",
+                tension: 0.1,
               },
             ],
           },
         });
-        chartRefs.current.set(pieChartRef.current, pieChart);
+        chartRefs.current.set(combinedLineChartRef.current, chart);
       }
 
-      // Set up line charts for each tag
+      // Set up individual line charts for each tag as before
       Object.keys(chartData).forEach((tag, index) => {
         const chartContainer = document.getElementById(
           `chart-container-${tag}`
@@ -135,8 +133,11 @@ export default function Graphs() {
       ) : (
         <>
           <div className={styles.chartContainer}>
-            <p>Combined Average Pie Chart</p>
-            <canvas ref={pieChartRef} className={styles.chartCanvas}></canvas>
+            <p>Combined Average Line Chart</p>
+            <canvas
+              ref={combinedLineChartRef}
+              className={styles.chartCanvas}
+            ></canvas>
           </div>
           {Object.keys(selectedKeys)
             .filter((key) => selectedKeys[key])
