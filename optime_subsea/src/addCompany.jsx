@@ -261,7 +261,7 @@ function AddCompanyAndProjectForm() {
                       {project.name}
                     </span>
                     {/* Conditionally show Delete Project button for 'admin', based on userType2 */}
-                    {(userType2 === "admin" || userType2 === "super visor") && (
+                    {(userType2 === "admin" || userType2 === "supervisor") && (
                       <button
                         onClick={() => handleDeleteProject(project.projectid)}
                         className={styles.deleteButton}

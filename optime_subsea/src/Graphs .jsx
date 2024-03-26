@@ -66,7 +66,7 @@ export default function Graphs() {
             labels: Object.keys(chartData).map((tag) => `Tag ${tag}`),
             datasets: [
               {
-                label: "Average Valuekkl",
+                label: "Average Value for Selected ",
                 data: Object.values(chartData).map((data) => data.average),
                 fill: false,
                 borderColor: "rgb(75, 192, 192)",
