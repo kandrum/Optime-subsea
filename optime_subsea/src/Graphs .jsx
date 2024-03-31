@@ -3,12 +3,13 @@ import { useSelector } from "react-redux";
 import { Chart, registerables } from "chart.js";
 import { ip } from "./appconstants";
 import styles from "./style/Graph.module.css";
-
+import wrong from "./wrong.jpg";
 Chart.register(...registerables);
 
 export default function Graphs() {
   const [isLoading, setIsLoading] = useState(false);
   const [chartData, setChartData] = useState(null);
+  const [error, setError] = useState(null); // State to hold error message
   const tagsState = useSelector((state) => state.tags);
   const { selectedKeys, startDate, endDate } = tagsState;
   const folderName = useSelector((state) => state.currentFolder.folder);
@@ -20,6 +21,7 @@ export default function Graphs() {
   useEffect(() => {
     if (!selectedKeys || !startDate || !endDate) return;
 
+    setError(null); // Clear previous errors
     setIsLoading(true);
     const tagsQueryParam = Object.keys(selectedKeys)
       .filter((key) => selectedKeys[key])
@@ -43,13 +45,16 @@ export default function Graphs() {
         setChartData(data);
       } catch (error) {
         console.error("Fetching data failed:", error);
+        setError(
+          "I CANNOT FIND THE DATES OR TAGS SELECTED, SELECT THE TAGS WHICH ARE AVAILABLE IN THE DATA."
+        );
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [selectedKeys, startDate, endDate]);
+  }, [selectedKeys, startDate, endDate, folderName]);
 
   useEffect(() => {
     if (chartData) {
@@ -57,7 +62,6 @@ export default function Graphs() {
       chartRefs.current.forEach((chart) => chart.destroy());
       chartRefs.current.clear();
 
-      // Set up combined line chart for average values of all tags
       if (combinedLineChartRef.current) {
         const ctx = combinedLineChartRef.current.getContext("2d");
         const chart = new Chart(ctx, {
@@ -66,7 +70,7 @@ export default function Graphs() {
             labels: Object.keys(chartData).map((tag) => `Tag ${tag}`),
             datasets: [
               {
-                label: "Average Value for Selected ",
+                label: "Average Value for Selected",
                 data: Object.values(chartData).map((data) => data.average),
                 fill: false,
                 borderColor: "rgb(75, 192, 192)",
@@ -78,7 +82,6 @@ export default function Graphs() {
         chartRefs.current.set(combinedLineChartRef.current, chart);
       }
 
-      // Set up individual line charts for each tag as before
       Object.keys(chartData).forEach((tag, index) => {
         const chartContainer = document.getElementById(
           `chart-container-${tag}`
@@ -111,7 +114,9 @@ export default function Graphs() {
           },
           options: {
             scales: {
-              y: { beginAtZero: true },
+              y: {
+                beginAtZero: true,
+              },
             },
           },
         });
@@ -130,6 +135,11 @@ export default function Graphs() {
     <div className={styles.graphsContainer}>
       {isLoading ? (
         <div className={styles.loader}>Loading...</div>
+      ) : error ? (
+        <div className={styles.error}>
+          {error}
+          <img src={wrong} />
+        </div>
       ) : (
         <>
           <div className={styles.chartContainer}>

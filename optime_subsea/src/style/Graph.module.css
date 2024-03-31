@@ -52,6 +52,29 @@
   margin: 20px auto;
 }
 
+.error {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically (for when the container is larger than the content) */
+  background-color: #ffdddd; /* Light red background to highlight the error */
+  color: #d8000c; /* Darker red text color for contrast and visibility */
+  border: 1px solid #d8000c; /* Border to emphasize the error box */
+  padding: 20px; /* Increased padding for better spacing */
+  margin: 20px 0; /* Spacing above and below the error message */
+  border-radius: 5px; /* Rounded corners for a smoother look */
+  width: auto;
+  text-align: center;
+  font-size: 16px; /* Adequate font size for readability */
+}
+
+.error img {
+  margin-top: 10px; /* Space between the text and the image */
+  width: 200px; /* Adjust width as needed */
+  height: 200px; /* Adjust height as needed to maintain aspect ratio */
+  object-fit: contain; /* Ensure the image is fully visible */
+}
+
 /* Animation for the loader */
 @keyframes spin {
   0% {
