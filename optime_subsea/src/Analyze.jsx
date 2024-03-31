@@ -2,17 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./style/Analyze.module.css";
 import { ip } from "./appconstants";
-import Graphs from "./Graphs ";
 import { useNavigate } from "react-router-dom";
 
 export default function Analyze() {
   const folderName = useSelector((state) => state.currentFolder.folder);
   const [organizedData, setOrganizedData] = useState({});
   const [selectedKeys, setSelectedKeys] = useState({});
+  const [expandedPaths, setExpandedPaths] = useState({}); // Moved inside the component
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchKeyData() {
       const filePath = `uploads/${folderName}/mydata/keys.csv`;
@@ -58,6 +59,13 @@ export default function Analyze() {
     return hierarchy;
   };
 
+  const toggleExpand = (path) => {
+    setExpandedPaths((prevExpandedPaths) => ({
+      ...prevExpandedPaths,
+      [path]: !prevExpandedPaths[path],
+    }));
+  };
+
   const handleCheckboxChange = (key) => {
     setSelectedKeys((prevSelectedKeys) => ({
       ...prevSelectedKeys,
@@ -67,27 +75,35 @@ export default function Analyze() {
 
   const renderHierarchy = (node, path = "") => {
     return (
-      <ul>
+      <ul className={styles.HierarchyList}>
         {Object.keys(node).map((key) => {
           const fullPath = path ? `${path}.${key}` : key;
+          const isExpanded = expandedPaths[fullPath];
+
           return (
-            <li key={fullPath}>
-              {key.replace("Platform.", "")}
-              {node[key].key && (
-                <>
-                  <button onClick={() => console.log(`Key: ${node[key].key}`)}>
-                    tag {node[key].key}
-                  </button>
-                  <input
-                    type="checkbox"
-                    checked={selectedKeys[node[key].key] || false}
-                    onChange={() => handleCheckboxChange(node[key].key)}
-                  />
-                </>
+            <li key={fullPath} className={styles.HierarchyItem}>
+              <div onClick={() => toggleExpand(fullPath)} className={styles.HierarchyTitle}>
+                {key.replace("Platform.", "")}
+              </div>
+              {isExpanded && (
+                <div className={styles.HierarchyContent}>
+                  {node[key].key && (
+                    <>
+                      <button onClick={() => console.log(`Key: ${node[key].key}`)}>
+                        tag {node[key].key}
+                      </button>
+                      <input
+                        type="checkbox"
+                        checked={selectedKeys[node[key].key] || false}
+                        onChange={() => handleCheckboxChange(node[key].key)}
+                      />
+                    </>
+                  )}
+                  {node[key].subItems &&
+                    Object.keys(node[key].subItems).length > 0 &&
+                    renderHierarchy(node[key].subItems, fullPath)}
+                </div>
               )}
-              {node[key].subItems &&
-                Object.keys(node[key].subItems).length > 0 &&
-                renderHierarchy(node[key].subItems, fullPath)}
             </li>
           );
         })}
@@ -99,7 +115,6 @@ export default function Analyze() {
     console.log("Selected keys:", selectedKeys);
     console.log("Start date:", startDate);
     console.log("End date:", endDate);
-    // Here you would handle the submission of the data, such as sending it to a server or processing it further.
     dispatch({ type: "SET_SELECTED_KEYS", payload: selectedKeys });
     dispatch({ type: "SET_START_DATE", payload: startDate });
     dispatch({ type: "SET_END_DATE", payload: endDate });
@@ -108,7 +123,7 @@ export default function Analyze() {
 
   return (
     <div className={styles.AnalyzeContainer}>
-      <h1>Select Keys, Start-Date , End-Data to </h1>
+      <h1>Select Keys, Start-Date, End-Data</h1>
       <p>Folder Name: {folderName || "No folder selected"}</p>
       <div>
         <h2>Key Data</h2>
@@ -125,7 +140,7 @@ export default function Analyze() {
           type="date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          className={styles.BlueDateInput}
+          className={styles.DateInput}
         />
         <label htmlFor="end-date">End Date:</label>
         <input
@@ -133,9 +148,9 @@ export default function Analyze() {
           type="date"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
-          className={styles.BlueDateInput}
+          className={styles.DateInput}
         />
-        <button onClick={handleSubmit} className={styles.BlueButton}>
+        <button onClick={handleSubmit} className={styles.Button}>
           Analyze
         </button>
       </div>
