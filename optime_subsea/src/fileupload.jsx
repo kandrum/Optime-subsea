@@ -12,6 +12,9 @@ function FileUpload() {
   const [folderName, setFolderName] = useState("SelectTheProject");
   const [formDataKey, setFormDataKey] = useState("file");
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const dispatch = useDispatch();
 
   const userType = useSelector((state) => state.userType.result.role);
@@ -66,36 +69,54 @@ function FileUpload() {
     setFormDataKey(isZip ? "zipfile" : "file");
   };
 
-  const handleFileUpload = async () => {
+  const handleFileUpload = () => {
     if (!file) {
       alert("Please select a file first!");
       return;
     }
 
     setIsLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append(formDataKey, file);
-      formData.append("folderName", folderName);
+    const formData = new FormData();
+    formData.append(formDataKey, file);
+    formData.append("folderName", folderName);
 
-      const response = await fetch(`${ip}${uploadEndpoint}`, {
-        method: "POST",
-        body: formData,
-      });
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `${ip}${uploadEndpoint}`, true);
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+    xhr.upload.onprogress = function (event) {
+      if (event.lengthComputable) {
+        const progress = (event.loaded / event.total) * 100;
+        setUploadProgress(progress);
+        if (progress === 100) {
+          // File is fully uploaded but not necessarily processed
+          setIsProcessing(true);
+        }
       }
+    };
 
-      const result = await response.json();
-      alert(result.message);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      alert("Error uploading file.");
-    } finally {
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        // Success
+        const result = JSON.parse(xhr.responseText);
+        alert(result.message);
+      } else {
+        // Error
+        alert("Error uploading file.");
+      }
       setIsLoading(false);
-      fetchData();
-    }
+      setIsProcessing(false);
+      setUploadProgress(0); // Reset progress
+      fetchData(); // Refresh the data
+    };
+
+    xhr.onerror = function () {
+      alert("Error uploading file.");
+      setIsLoading(false);
+      setIsProcessing(false);
+      setUploadProgress(0); // Reset progress
+    };
+
+    xhr.send(formData);
   };
 
   const handleDeleteFile = async (filePath) => {
@@ -227,7 +248,16 @@ function FileUpload() {
         <button onClick={handleAnalyzeClick} className={styles.uploadButton}>
           Analyze for {folderName}
         </button>
-        {isLoading && <div className={styles.loader}></div>}
+        {isProcessing && (
+          <div>
+            <p>Processing file...</p>
+          </div>
+        )}
+        {isLoading && uploadProgress < 100 && (
+          <div>
+            <p>Uploading: {Math.round(uploadProgress)}%</p>
+          </div>
+        )}
       </div>
       <div className={styles["filedetails"]}>
         <h2>File Details</h2>

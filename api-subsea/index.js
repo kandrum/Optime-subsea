@@ -316,7 +316,7 @@ app.get("/process-csv", (req, res) => {
   });
 });
 
-/* ----------------------------------------  ------------------------------- */
+/* ---------------------------------------- endpoint to download  ------------------------------- */
 
 // Serve files dynamically from the uploads directory
 app.get("/files/:filePath", (req, res) => {
