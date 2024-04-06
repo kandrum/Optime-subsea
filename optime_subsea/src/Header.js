@@ -12,6 +12,7 @@ function Header() {
   const [userType, setuserType] = useState(
     useSelector((state) => state.userType.result.role)
   );
+  const username = useSelector((state) => state.userType.result.username);
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
@@ -27,7 +28,7 @@ function Header() {
       className={styles.headerContainer}
       style={{ backgroundImage: `url(${headerBackground})` }}
     >
-      <h1 className={styles.headerTitle}>Data-Visualization optime subsea </h1>
+      <h1 className={styles.headerTitle}>Welcome Back, {username} </h1>
       <div className={styles.relative}>
         <button onClick={toggleDropdown} className={styles.userButton}>
           <img src={user} alt="avatar" className={styles.userAvatar} />
