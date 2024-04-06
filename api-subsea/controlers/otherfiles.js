@@ -13,7 +13,11 @@ const storage = multer.diskStorage({
     cb(null, tempUploadPath);
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    // Original filename modified to check for uniqueness
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const uniqueFilename =
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname);
+    cb(null, uniqueFilename);
   },
 });
 
@@ -60,11 +64,22 @@ const handleFileUpload = (req, res) => {
     const tempFilePath = path.join(tempUploadPath, req.file.filename);
     const finalFilePath = path.join(finalDestinationPath, req.file.filename);
 
+    // Rename the file if it already exists to maintain uniqueness
+    let finalUniqueFilePath = finalFilePath;
+    let fileCounter = 1;
+    while (fs.existsSync(finalUniqueFilePath)) {
+      const parsedPath = path.parse(finalFilePath);
+      finalUniqueFilePath = path.join(
+        parsedPath.dir,
+        `${parsedPath.name}(${fileCounter})${parsedPath.ext}`
+      );
+      fileCounter++;
+    }
+
     // Move the file to the final destination
-    fs.rename(tempFilePath, finalFilePath, (err) => {
+    fs.rename(tempFilePath, finalUniqueFilePath, (err) => {
       if (err) {
         console.error("Error moving file:", err);
-        // Attempt to clean up the temp file in case of error
         fs.unlink(tempFilePath, (unlinkErr) => {
           if (unlinkErr)
             console.error("Error cleaning up temp file:", unlinkErr);
@@ -76,8 +91,8 @@ const handleFileUpload = (req, res) => {
       res.send({
         message: "File uploaded successfully.",
         fileInfo: {
-          filename: req.file.filename,
-          path: finalFilePath,
+          filename: path.basename(finalUniqueFilePath),
+          path: finalUniqueFilePath,
           type: req.file.mimetype,
           folderName: folderName,
         },
