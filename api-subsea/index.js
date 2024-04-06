@@ -103,20 +103,20 @@ app.post("/addcompany", (req, res) => {
 });
 
 /* ----------------------------------------  Endpoint to add a project --------------------- */
+// In your route
 app.post("/addprojects", async (req, res) => {
   try {
-    // Extract project data from request body
     const projectData = req.body;
-
-    // Call the addProject function and await its response
     const result = await addProject(projectData);
 
-    // Send success response
-    res.status(201).json(result);
+    if (result.error) {
+      res.status(400).json(result); // Consider using 400 for client-side errors like duplicates
+    } else {
+      res.status(201).json(result);
+    }
   } catch (err) {
-    // Handle errors
     console.error("Error in /projects endpoint:", err.message);
-    res.status(500).json({ message: "Failed to add project" });
+    res.status(500).json({ error: true, message: err.message });
   }
 });
 

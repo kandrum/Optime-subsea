@@ -32,7 +32,13 @@ async function addProject(projectData) {
     }; // Return the success message and project ID
   } catch (err) {
     console.error("Error adding the project:", err);
-    throw err; // Rethrow the error to be handled by the caller
+    // Instead of rethrowing, return an error response
+    return {
+      error: true,
+      message: err,
+      // Optionally include detailed error information if it's safe to expose
+      // detail: err.message
+    };
   }
 }
 

@@ -46,6 +46,10 @@ function AddCompanyAndProjectForm() {
       fetchCompanies();
       setShowCompanyInput(false);
       setNewCompanyName("");
+    } else {
+      // Handle non-200 responses
+      const errorData = await response.json(); // Assuming your server sends back error details in JSON format
+      alert(errorData.error.message);
     }
   };
   const handleDeleteCompany = async (companyid) => {
@@ -131,7 +135,7 @@ function AddCompanyAndProjectForm() {
       } else {
         // Handle non-200 responses
         const errorData = await response.json(); // Assuming your server sends back error details in JSON format
-        console.error("Failed to add the project. Response:", errorData);
+        alert(errorData.message.message);
       }
     } catch (error) {
       // Handle network errors or other fetch issues

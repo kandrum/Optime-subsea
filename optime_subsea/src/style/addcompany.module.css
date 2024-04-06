@@ -78,6 +78,10 @@
   color: #333;
   font-weight: bold;
 }
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+}
 
 .deleteButton {
   padding: 5px 10px;
@@ -128,6 +132,11 @@
 
 .projectName {
   color: #555;
+}
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
 }
 
 /* You can add media queries here for responsiveness if needed */
