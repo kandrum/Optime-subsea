@@ -120,27 +120,40 @@ function FileUpload() {
   };
 
   const handleDeleteFile = async (filePath) => {
-    try {
-      const response = await fetch(`${ip}/delete-file`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ path: filePath }),
-      });
+    // Ask user for confirmation before deleting
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this file?"
+    );
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+    // Proceed with deletion only if user confirmed
+    if (isConfirmed) {
+      try {
+        const response = await fetch(`${ip}/delete-file`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ path: filePath }),
+        });
+
+        if (!response.ok) {
+          // If the response is not ok, throw an error to jump to the catch block
+          throw new Error("Network response was not ok");
+        }
+
+        // If everything is fine, read the response and alert the user
+        const result = await response.json();
+        alert(result.message);
+        fetchData();
+      } catch (error) {
+        console.error("Error deleting file:", error);
+        alert("Error deleting file."); // You could improve by using the error message from the response
       }
-
-      const result = await response.json();
-      alert(result.message);
-      fetchData();
-    } catch (error) {
-      console.error("Error deleting file:", error);
-      alert("Error deleting file.");
+    } else {
+      console.log("File deletion was canceled by the user.");
     }
   };
+
   const handleFileooClick = async (filePath) => {
     // Here you can either display the file content directly
     // or provide a download link depending on the file type
