@@ -9,11 +9,12 @@ function FileUpload() {
   const [file, setFile] = useState(null);
   const [fetchedData, setFetchedData] = useState(null);
   const [uploadEndpoint, setUploadEndpoint] = useState("");
-  const [folderName, setFolderName] = useState("SelectTheProject");
+  const [folderName, setFolderName] = useState(null);
   const [formDataKey, setFormDataKey] = useState("file");
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [hasMyData, setHasMyData] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -23,6 +24,10 @@ function FileUpload() {
   );
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // This effect updates hasMyData based on fetchedData's state
+    setHasMyData(fetchedData ? fetchedData.hasOwnProperty("mydata") : false);
+  }, [fetchedData]);
   useEffect(() => {
     if (currentCompany.companyname && currentCompany.projectname) {
       const newFolderName = `${currentCompany.companyname}${currentCompany.projectname}`;
@@ -240,7 +245,7 @@ function FileUpload() {
       className={styles["container"]}
       style={{ backgroundImage: `url(${gif})` }}
     >
-      <h1 className={styles.title}>Uploading file for: {folderName}</h1>
+      <h1 className={styles.title}>{folderName}</h1>
       <div className={styles.fileInputContainer}>
         {(userType === "admin" || userType === "supervisor") && (
           <>
@@ -258,9 +263,17 @@ function FileUpload() {
             </button>
           </>
         )}
-        <button onClick={handleAnalyzeClick} className={styles.uploadButton}>
-          Analyze for {folderName}
-        </button>
+
+        {folderName != null &&
+          hasMyData && ( // Corrected the logic here to check for hasMyData's state
+            <button
+              onClick={handleAnalyzeClick}
+              className={styles.uploadButton}
+            >
+              Analyze for {folderName}
+            </button>
+          )}
+
         {isProcessing && (
           <div>
             <p>Processing file...</p>
