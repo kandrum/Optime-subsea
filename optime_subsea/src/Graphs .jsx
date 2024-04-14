@@ -9,19 +9,19 @@ Chart.register(...registerables);
 export default function Graphs() {
   const [isLoading, setIsLoading] = useState(false);
   const [chartData, setChartData] = useState(null);
-  const [error, setError] = useState(null); // State to hold error message
+  const [error, setError] = useState(null);
   const tagsState = useSelector((state) => state.tags);
   const { selectedKeys, startDate, endDate } = tagsState;
   const folderName = useSelector((state) => state.currentFolder.folder);
 
-  // Refs for the charts to manage instances
   const chartRefs = useRef(new Map());
   const combinedLineChartRef = useRef(null);
+  const dailyAverageChartRef = useRef(null);
 
   useEffect(() => {
     if (!selectedKeys || !startDate || !endDate) return;
 
-    setError(null); // Clear previous errors
+    setError(null);
     setIsLoading(true);
     const tagsQueryParam = Object.keys(selectedKeys)
       .filter((key) => selectedKeys[key])
@@ -58,20 +58,22 @@ export default function Graphs() {
 
   useEffect(() => {
     if (chartData) {
-      // Clean up old charts
       chartRefs.current.forEach((chart) => chart.destroy());
       chartRefs.current.clear();
 
+      // Combined Line Chart for all tag averages
       if (combinedLineChartRef.current) {
         const ctx = combinedLineChartRef.current.getContext("2d");
         const chart = new Chart(ctx, {
           type: "line",
           data: {
-            labels: Object.keys(chartData).map((tag) => `Tag ${tag}`),
+            labels: Object.keys(chartData.stats).map((tag) => `Tag ${tag}`),
             datasets: [
               {
-                label: "Average Value for Selected",
-                data: Object.values(chartData).map((data) => data.average),
+                label: "Average Value for Selected Tags",
+                data: Object.values(chartData.stats).map(
+                  (data) => data.average
+                ),
                 fill: false,
                 borderColor: "rgb(75, 192, 192)",
                 tension: 0.1,
@@ -82,14 +84,49 @@ export default function Graphs() {
         chartRefs.current.set(combinedLineChartRef.current, chart);
       }
 
-      Object.keys(chartData).forEach((tag, index) => {
-        const chartContainer = document.getElementById(
-          `chart-container-${tag}`
-        );
-        let canvas = chartContainer.querySelector("canvas");
+      // Daily Average Chart
+      if (dailyAverageChartRef.current) {
+        const ctx = dailyAverageChartRef.current.getContext("2d");
+        const chart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: Object.keys(chartData.date_averages),
+            datasets: [
+              {
+                label: "Daily Average",
+                data: Object.values(chartData.date_averages),
+                backgroundColor: "rgba(153, 102, 255, 0.2)",
+                borderColor: "rgba(153, 102, 255, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+        chartRefs.current.set(dailyAverageChartRef.current, chart);
+      }
+
+      // Individual Charts for each tag
+      Object.keys(chartData.stats).forEach((tag) => {
+        const tagData = chartData.stats[tag];
+        const canvasId = `canvas-tag-${tag}`;
+        let canvas = document.getElementById(canvasId);
         if (!canvas) {
+          const container = document.createElement("div");
+          container.className = styles.chartContainer;
+          container.innerHTML = `<p>Graph for Tag ${tag}</p>`;
           canvas = document.createElement("canvas");
-          chartContainer.appendChild(canvas);
+          canvas.id = canvasId;
+          container.appendChild(canvas);
+          document
+            .querySelector(`.${styles.graphsContainer}`)
+            .appendChild(container);
         }
         const ctx = canvas.getContext("2d");
         const chart = new Chart(ctx, {
@@ -99,14 +136,10 @@ export default function Graphs() {
             datasets: [
               {
                 label: `Data for Tag ${tag}`,
-                data: [
-                  chartData[tag].min,
-                  chartData[tag].average,
-                  chartData[tag].max,
-                ],
+                data: [tagData.min, tagData.average, tagData.max],
                 fill: false,
                 borderColor: `hsl(${
-                  (index / Object.keys(chartData).length) * 360
+                  (parseInt(tag) / Object.keys(chartData.stats).length) * 360
                 }, 70%, 50%)`,
                 tension: 0.1,
               },
@@ -125,7 +158,6 @@ export default function Graphs() {
     }
 
     return () => {
-      // Clean up charts on component unmount
       chartRefs.current.forEach((chart) => chart.destroy());
       chartRefs.current.clear();
     };
@@ -138,7 +170,7 @@ export default function Graphs() {
       ) : error ? (
         <div className={styles.error}>
           {error}
-          <img src={wrong} />
+          <img src={wrong} alt="Error" />
         </div>
       ) : (
         <>
@@ -149,17 +181,25 @@ export default function Graphs() {
               className={styles.chartCanvas}
             ></canvas>
           </div>
-          {Object.keys(selectedKeys)
-            .filter((key) => selectedKeys[key])
-            .map((tag) => (
-              <div
-                key={tag}
-                id={`chart-container-${tag}`}
-                className={styles.chartContainer}
-              >
-                <p>Graph for Tag {tag}</p>
-              </div>
-            ))}
+          <div className={styles.chartContainer}>
+            <p>Daily Average Chart</p>
+            <canvas
+              ref={dailyAverageChartRef}
+              className={styles.chartCanvas}
+            ></canvas>
+          </div>
+          {Object.keys(chartData?.stats || {}).map((tag) => (
+            <div
+              key={`chart-container-${tag}`}
+              className={styles.chartContainer}
+            >
+              <p>Graph for Tag {tag}</p>
+              <canvas
+                id={`canvas-tag-${tag}`}
+                className={styles.chartCanvas}
+              ></canvas>
+            </div>
+          ))}
         </>
       )}
     </div>
