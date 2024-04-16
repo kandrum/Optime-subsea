@@ -1,4 +1,3 @@
-/* Overall container styling */
 .AnalyzeContainer {
   font-family: "Arial", sans-serif;
   color: #333;
@@ -26,7 +25,7 @@
 /* List styling */
 .AnalyzeContainer ul {
   list-style-type: none;
-  padding-left: 20px; /* Added padding for nested lists */
+  padding: 0; /* Added padding for nested lists */
 }
 
 .AnalyzeContainer li {
@@ -34,19 +33,24 @@
   padding: 5px;
   position: relative;
   padding-left: 30px; /* Added padding for custom bullet */
+  margin: 10px 0;
+ 
 }
 
-/* Custom bullet styling */
-.AnalyzeContainer li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 2px;
-  background-color: #007bff; /* Blue line for custom bullet */
+.AnalyzeContainer ul ul {
+  padding-left: 0;
 }
+
+.HierarchyTitle {
+  cursor: pointer;
+  /* Add other styles as needed */
+}
+
+.HierarchyTitle::before {
+  margin-right: 5px;
+  /* Add other styles as needed */
+}
+
 
 /* Button styling */
 button {

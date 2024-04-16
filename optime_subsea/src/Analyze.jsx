@@ -79,16 +79,19 @@ export default function Analyze() {
         {Object.keys(node).map((key) => {
           const fullPath = path ? `${path}.${key}` : key;
           const isExpanded = expandedPaths[fullPath];
-
+  
+          // Determine the symbol to show based on whether the item is expanded
+          const indicator = isExpanded ? '▼' : '►';
+  
           return (
             <li key={fullPath} className={styles.HierarchyItem}>
               <div onClick={() => toggleExpand(fullPath)} className={styles.HierarchyTitle}>
-                {key.replace("Platform.", "")}
+                {indicator} {key.replace("Platform.", "")} {/* Display the indicator next to the title */}
               </div>
               {isExpanded && (
-                <div className={styles.HierarchyContent}>
+                <ul>
                   {node[key].key && (
-                    <>
+                    <li>
                       <button onClick={() => console.log(`Key: ${node[key].key}`)}>
                         tag {node[key].key}
                       </button>
@@ -97,12 +100,11 @@ export default function Analyze() {
                         checked={selectedKeys[node[key].key] || false}
                         onChange={() => handleCheckboxChange(node[key].key)}
                       />
-                    </>
+                    </li>
                   )}
-                  {node[key].subItems &&
-                    Object.keys(node[key].subItems).length > 0 &&
+                  {node[key].subItems && Object.keys(node[key].subItems).length > 0 &&
                     renderHierarchy(node[key].subItems, fullPath)}
-                </div>
+                </ul>
               )}
             </li>
           );
@@ -110,6 +112,7 @@ export default function Analyze() {
       </ul>
     );
   };
+  
 
   const handleSubmit = () => {
     console.log("Selected keys:", selectedKeys);
