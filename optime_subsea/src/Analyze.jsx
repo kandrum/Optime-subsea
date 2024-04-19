@@ -75,41 +75,44 @@ export default function Analyze() {
 
   const renderHierarchy = (node, path = "") => {
     return (
-      <ul className={styles.HierarchyList}>
+      <div className={styles.TreeView}>
         {Object.keys(node).map((key) => {
           const fullPath = path ? `${path}.${key}` : key;
           const isExpanded = expandedPaths[fullPath];
-  
-          // Determine the symbol to show based on whether the item is expanded
+          const hasChildren = node[key].subItems && Object.keys(node[key].subItems).length > 0;
+          const hasKey = node[key].key != null; // Check if the current node has a key for the tag.
           const indicator = isExpanded ? '▼' : '►';
   
           return (
-            <li key={fullPath} className={styles.HierarchyItem}>
-              <div onClick={() => toggleExpand(fullPath)} className={styles.HierarchyTitle}>
-                {indicator} {key.replace("Platform.", "")} {/* Display the indicator next to the title */}
+            <div key={fullPath} className={styles.TreeNode}>
+              <div className={styles.NodeHeader} onClick={() => toggleExpand(fullPath)}>
+                {hasChildren && (
+                  <span className={styles.Indicator}>{indicator}</span>
+                )}
+                <span className={styles.NodeTitle}>{key.replace("Platform.", "")}</span>
+                {/* Render the checkbox and tag next to the NodeTitle if this node has a key */}
+                {hasKey && (
+                  <div className={styles.NodeInline}>
+                    <input
+                      type="checkbox"
+                      checked={selectedKeys[node[key].key] || false}
+                      onChange={() => handleCheckboxChange(node[key].key)}
+                    />
+                    <label onClick={() => console.log(`Key: ${node[key].key}`)}>
+                      tag {node[key].key}
+                    </label>
+                  </div>
+                )}
               </div>
-              {isExpanded && (
-                <ul>
-                  {node[key].key && (
-                    <li>
-                      <button onClick={() => console.log(`Key: ${node[key].key}`)}>
-                        tag {node[key].key}
-                      </button>
-                      <input
-                        type="checkbox"
-                        checked={selectedKeys[node[key].key] || false}
-                        onChange={() => handleCheckboxChange(node[key].key)}
-                      />
-                    </li>
-                  )}
-                  {node[key].subItems && Object.keys(node[key].subItems).length > 0 &&
-                    renderHierarchy(node[key].subItems, fullPath)}
-                </ul>
+              {isExpanded && hasChildren && (
+                <div className={styles.NodeChildren}>
+                  {renderHierarchy(node[key].subItems, fullPath)}
+                </div>
               )}
-            </li>
+            </div>
           );
         })}
-      </ul>
+      </div>
     );
   };
   

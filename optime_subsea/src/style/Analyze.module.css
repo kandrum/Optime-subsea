@@ -41,16 +41,83 @@
   padding-left: 0;
 }
 
-.HierarchyTitle {
+/*.HierarchyTitle {
   cursor: pointer;
-  /* Add other styles as needed */
+  
 }
 
 .HierarchyTitle::before {
   margin-right: 5px;
-  /* Add other styles as needed */
+  
+} */
+
+/* Tree View Styling */
+
+
+.TreeView {
+  font-family: "Arial", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
+.TreeNode {
+  margin: 5px 0;
+  position: relative;
+  
+}
+
+.NodeHeader {
+  display: flex;
+  justify-content: space-between; /* Aligns items to each side of the container */
+  align-items: center;
+  padding-right: 10px; /* Add padding to ensure content is not touching the edges */
+  width: 100%;
+}
+
+.NodeHeader:hover {
+  background-color: #f5f5f5;
+}
+
+.NodeTitle {
+  margin-left: 10px;
+  min-width: 100px;
+  flex: 1;
+}
+
+.NodeChildren {
+  padding-left: 20px;
+  border-left: 1px solid #ddd;
+  margin-left: 10px;
+  padding-top: 5px;
+  display: flex; 
+  
+}
+
+.Node {
+  
+  margin-bottom: 5px;
+}
+
+.Node label {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.NodeInline {
+  display: flex;
+  flex-shrink: 0; /* Prevents the tag and checkbox from shrinking */
+  white-space: nowrap; /* Keeps the tag and its checkbox on the same line */
+}
+.Indicator {
+  margin-right: 5px; /* space between the indicator and the title */
+  cursor: pointer; /* indicates the indicator is clickable */
+  user-select: none; /* prevents the indicator from being selected */
+}
 
 /* Button styling */
 button {
