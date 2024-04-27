@@ -282,7 +282,7 @@ app.get("/process-csv", (req, res) => {
   const endDate = req.query.endDate;
 
   // Spawn Python process with filePath, tags, startDate, and endDate as arguments
-  const pythonProcess = spawn("python", [
+  const pythonProcess = spawn("python3", [
     "./controlers/process_csv.py",
     filePath,
     tags, // Pass the tags as a command line argument
@@ -336,7 +336,7 @@ app.get("/files/:filePath", (req, res) => {
 });
 
 /* ---------------------------------------- Start the server ------------------------------- */
-app.listen(PORT, "localhost", () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on 0.0.0.0:${PORT}`);
 });
 
